@@ -1,49 +1,65 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import SignIn from '@/views/SignIn.vue'
+import SignUp from '@/views/SignUp.vue'
 const router = useRouter()
-  const register = () => {
-    router.push("/register")
-  }
-  const login = () => {
-    router.push("/login")
-  }
+const login = () => {
+  router.push('/login')
+  userLogReg.value = false
+}
+
+const register = () => {
+  userLogReg.value = false
+}
+
+const userLogReg = ref(true)
 </script>
 
 <template>
-  <div class="main-body">
+  <div class="main-body" :class="{userLogReg: 'loginShow'}" >
     <div class="main-img">
       <img src="@/assets/svg/health1.svg" />
     </div>
-    <div class="main-text">
-      <h1>Manage your health with ease, anytime, anywhere</h1>
-    </div>
-    <div class="btn">
-      <button class="btn-main" @click="register">Register</button>
-      <button class="btn-primary" @click="login">SignUp</button>
-    </div>
+
+    <Transition name="page-slide">
+      <div v-if="userLogReg">
+        <div class="main-text">
+          <h1>Manage your health with ease, anytime, anywhere</h1>
+        </div>
+        <div class="btn">
+          <button class="btn-main" @click="register">Register</button> <br />
+          <button class="btn-primary" @click="login">SignUp</button>
+        </div>
+      </div>
+    </Transition>
+    <Transition name="swipe-up">
+      <div v-if="!userLogReg" class="sign-in">
+        <SignIn />
+      </div>
+    </Transition>
   </div>
 </template>
 
 <style scoped>
-.mr-5 {
-  margin-right: 5px;
-}
 .ml-5 {
   margin-left: 5px;
 }
 @media only screen and (min-width: 320px) and (max-width: 480px) {
   .main-body {
-    display: grid;
-    grid-auto-rows: 450px 200px 1fr;
-    justify-items: center;
-    justify-content: space-between;
-    grid-auto-flow: row;
+    flex: grid;
+    min-height: 100vh;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #445ec1;
+    align-content: center;
   }
 
   .main-img {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 50px;
   }
 
   .main-text {
@@ -55,23 +71,52 @@ const router = useRouter()
   }
 
   .btn {
-    display: grid;
-    grid-auto-columns: 1fr 1fr;
-    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
   }
+
   .btn-main {
     padding: 10px 55px;
     border: none;
     border-radius: 20px;
+    margin-bottom: 20px;
   }
 
   .btn-primary {
     padding: 10px 55px;
     border: none;
     background-color: inherit;
-    border: 1px solid #D9D9D9;
+    border: 1px solid #d9d9d9;
     border-radius: 20px;
-    color: #D9D9D9;
+    color: #d9d9d9;
   }
+  .logVisible {
+    min-height: 10vh;
+  }
+
+  .page-slide-enter-active,
+  .page-slide-leave-active {
+    transition: transform 350ms ease-in-out;
+  }
+
+  .page-slide-enter-from,
+  .page-slide-leave-to {
+    transform: translateY(-50px);
+  }
+
+  .page-up-enter-active,
+  .page-up-leave-active {
+    transition: all 0.3s ease-in-out;
+  }
+
+  .page-up-enter-from,
+  .page-up-leave-to {
+    transform: translateY(100px);
+  }
+  .loginShow {
+   z-index: 99;
+  }
+
 }
 </style>

@@ -4,7 +4,8 @@ import { RouterView } from 'vue-router'
 
 <template>
   <div class="sign-reg">
-    <RouterView name="SignIn" />
+    <router-view name="SignIn" >
+    </router-view>
   </div>
   <div>
     <RouterView name="MainContent"/>
@@ -14,6 +15,5 @@ import { RouterView } from 'vue-router'
 <style scoped>
 .sign-reg {
   min-height: 100vh;
-  background-color: #445EC1;
 }
 </style>

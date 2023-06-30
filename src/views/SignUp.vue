@@ -1,5 +1,10 @@
 <template>
-    <div>
-      Sign Up
-    </div>
-  </template>
+  <div class="sign-up">Sign Up</div>
+</template>
+
+
+<style scoped>
+.sign-up {
+}
+
+</style>
