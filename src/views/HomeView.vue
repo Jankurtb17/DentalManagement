@@ -4,13 +4,18 @@ import { useRouter } from 'vue-router'
 import SignIn from '@/views/SignIn.vue'
 import SignUp from '@/views/SignUp.vue'
 const router = useRouter()
+const loginIsVisible = ref(false)
+const regIsVisible = ref(false)
 const login = () => {
-  router.push('/login')
   userLogReg.value = false
+  loginIsVisible.value = true
+  regIsVisible.value = false
 }
 
 const register = () => {
   userLogReg.value = false
+  loginIsVisible.value = false
+  regIsVisible.value = true
 }
 
 const userLogReg = ref(true)
@@ -29,13 +34,19 @@ const userLogReg = ref(true)
         </div>
         <div class="btn">
           <button class="btn-main" @click="register">Register</button> <br />
-          <button class="btn-primary" @click="login">SignUp</button>
+          <button class="btn-primary" @click="login">Login</button>
         </div>
       </div>
     </Transition>
     <Transition name="swipe-up">
-      <div v-if="!userLogReg" class="sign-in">
+      <div v-if="!userLogReg && loginIsVisible" class="sign-in">
         <SignIn />
+      </div>
+    </Transition>
+
+    <Transition name="swipe-up">
+      <div v-if="!userLogReg && regIsVisible" class="sign-up">
+        <SignUp />
       </div>
     </Transition>
   </div>
@@ -119,4 +130,75 @@ const userLogReg = ref(true)
   }
 
 }
+
+@media only screen and (min-width: 481px) and (max-width: 820px) {
+  .main-body {
+    display: grid;
+    height: 100vh;
+    background-color: #445ec1;
+  }
+
+  .main-img {
+    display: flex;
+    justify-content: center;
+    margin: 60px 0;
+  }
+
+  .main-text {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-size: 12px;
+    color: #fff;
+  }
+
+  .btn {
+    display: grid;
+    padding: 120px;
+  }
+
+  .btn-main {
+    padding: 10px 55px;
+    border: none;
+    border-radius: 20px;
+  }
+
+  .btn-primary {
+    padding: 10px 55px;
+    border: none;
+    background-color: inherit;
+    border: 1px solid #d9d9d9;
+    border-radius: 20px;
+    color: #d9d9d9;
+  }
+
+  .logVisible {
+    min-height: 10vh;
+  }
+
+  .page-slide-enter-active,
+  .page-slide-leave-active {
+    transition: all 350ms ease-in-out;
+  }
+
+  .page-slide-enter-from,
+  .page-slide-leave-to {
+    transform: translateY(-50px);
+  }
+
+  .page-up-enter-active,
+  .page-up-leave-active {
+    transition: all 0.3s ease-in-out;
+  }
+
+  .page-up-enter-from,
+  .page-up-leave-to {
+    transform: translateY(100px);
+  }
+  .loginShow {
+   z-index: 99;
+  }
+
+}
+
 </style>
