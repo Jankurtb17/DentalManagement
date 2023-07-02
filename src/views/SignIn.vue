@@ -1,46 +1,58 @@
 <template>
-  <div class="login">
-    <div class="google-signin">
-      <img src="@/assets/icons/GoogleIcon.svg" />
-      <span>Continue with Google</span>
+  <Transition  name="page-up">
+    <div class="login" v-show="!register">
+      <div class="google-signin">
+        <img src="@/assets/icons/GoogleIcon.svg" />
+        <span>Continue with Google</span>
+      </div>
+      <el-divider content-position="center">
+        <span> or login using </span>
+      </el-divider>
+      <el-form>
+        <el-form-item prop="Name">
+          <label for="">Email</label>
+          <el-input
+            type="text"
+            v-model="form.email"
+            placeholder="Enter your email"
+            size="large"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="Name">
+          <label>Password</label>
+          <el-input
+            type="password"
+            v-model="form.password"
+            placeholder="Password"
+            size="large"
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button color="#445ec1" size="large" primary>Sign In</el-button>
+        </el-form-item>
+      </el-form>
+      <div class="login-link">
+        <span>Don't have an account yet?</span> <a href="#" @click="showSignIn">Register here</a>
+      </div>
     </div>
-    <el-divider content-position="center">
-      <span> or </span>
-    </el-divider>
-    <el-form>
-      <el-form-item prop="Name">
-        <label for="">Email</label>
-        <el-input
-          type="text"
-          v-model="form.email"
-          placeholder="Enter your email"
-          size="large"
-        ></el-input>
-      </el-form-item>
-      <el-form-item prop="Name">
-        <label>Password</label>
-        <el-input
-          type="password"
-          v-model="form.password"
-          placeholder="Password"
-          size="large"
-        ></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button color="#445ec1" size="large" primary>Sign In</el-button>
-      </el-form-item>
-    </el-form>
-    <div class="login-link">
-      <span>Don't have an account yet?</span> <a href="#">Register here</a>
+  </Transition>
+  <Transition name="page-slide">
+    <div v-show="register">
+      <SignUp />
     </div>
-  </div>
+  </Transition>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive } from 'vue'
+import SignUp from "@/views/SignUp.vue"
 interface Form {
   email: string
   password: string
+}
+const register = ref(false)
+const showSignIn = () => {
+  register.value = true
 }
 const form = reactive<Form>({
   email: '',
@@ -49,6 +61,25 @@ const form = reactive<Form>({
 </script>
 
 <style scoped>
+.page-slide-enter-active,
+  .page-slide-leave-active {
+    transition: all 0.9s ease-in;
+  }
+
+  .page-slide-enter-from
+  .page-slide-leave-to {
+    transform: translateY(-100%);
+  }
+
+  .page-up-enter-active,
+  .page-up-leave-active {
+    transition: all 0.3s ease-out;
+  }
+
+  .page-up-enter-from,
+  .page-up-leave-to {
+    transform: translateY(100%);
+  }
 @media only screen and (min-width: 320px) and (max-width: 480px) {
   .login {
     padding: 50px;
@@ -105,5 +136,7 @@ const form = reactive<Form>({
     margin-top: 50px;
     text-align: center;
   }
+
+  
 }
 </style>

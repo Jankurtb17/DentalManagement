@@ -38,13 +38,13 @@ const userLogReg = ref(true)
         </div>
       </div>
     </Transition>
-    <Transition name="swipe-up">
+    <Transition name="page-up">
       <div v-if="!userLogReg && loginIsVisible" class="sign-in">
         <SignIn />
       </div>
     </Transition>
 
-    <Transition name="swipe-up">
+    <Transition name="page-up">
       <div v-if="!userLogReg && regIsVisible" class="sign-up">
         <SignUp />
       </div>
@@ -183,7 +183,7 @@ const userLogReg = ref(true)
 
   .page-slide-enter-from,
   .page-slide-leave-to {
-    transform: translateY(-50px);
+    transform: translateY(-50%);
   }
 
   .page-up-enter-active,
@@ -193,7 +193,7 @@ const userLogReg = ref(true)
 
   .page-up-enter-from,
   .page-up-leave-to {
-    transform: translateY(100px);
+    transform: translateY(100%);
   }
   .loginShow {
    z-index: 99;
