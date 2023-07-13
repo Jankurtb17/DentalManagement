@@ -14,6 +14,6 @@ import { RouterView } from 'vue-router'
 
 <style scoped>
 .sign-reg {
-  min-height: 100vh;
+  /* height: 100vh; */
 }
 </style>

@@ -59,23 +59,27 @@ const form = reactive<Form>({
 </script>
 
 <style scoped>
-.page-slide-enter-active,
+  .page-slide-enter-active{
+    transition: opacity 1000ms ease-in
+  }
   .page-slide-leave-active {
-    transition: transform 1s ease-in;
+    transition: opacity 1000ms ease-out;
   }
 
   .page-slide-enter-from
   .page-slide-leave-to {
+    opacity: 0;
     transform: translateY(-100%);
   }
 
   .page-up-enter-active,
   .page-up-leave-active {
-    transition: transform 0.3s ease-out;
+    transition: opacity 1000ms ease-out;
   }
 
   .page-up-enter-from,
   .page-up-leave-to {
+    opacity: 0;
     transform: translateY(100%);
   }
 @media only screen and (min-width: 320px) and (max-width: 480px) {
