@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import userLogin from "@/stores/login"
 import SignIn from '@/views/SignIn.vue'
 import SignUp from '@/views/SignUp.vue'
+const { googleLogin, loginUser } = userLogin()
 const router = useRouter()
 const loginIsVisible = ref(false)
 const regIsVisible = ref(false)
@@ -10,6 +12,10 @@ const regIsVisible = ref(false)
 interface FormItem {
   email: string
   password: string
+}
+
+const signinUser = async () => {
+  await loginUser(form.email, form.password)
 }
 
 const form = reactive({
@@ -30,6 +36,8 @@ const register = () => {
 }
 
 const userLogReg = ref(true)
+
+
 </script>
 
 <template>
@@ -68,7 +76,7 @@ const userLogReg = ref(true)
     <div class="layer-login">
       <div class="form">
         <h1 class="header-title">Welcome!</h1>
-        <div class="google-signin">
+        <div class="google-signin" @click="googleLogin">
           <img src="@/assets/icons/GoogleIcon.svg" />
           <span>Continue with Google</span>
         </div>
@@ -95,7 +103,7 @@ const userLogReg = ref(true)
             ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button class="btn-submit" color="#445ec1" size="large" primary>Sign In</el-button>
+            <el-button class="btn-submit" color="#445ec1" size="large" primary @click="signinUser">Sign In</el-button>
           </el-form-item>
         </el-form>
         <div class="login-link">
