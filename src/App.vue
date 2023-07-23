@@ -6,7 +6,7 @@ import { RouterView } from 'vue-router'
   <div class="sign-reg">
     <router-view name="SignIn"  v-slot="{ Component, route }">
       <Transition name="page-up" mode="out-in">
-      <div :key="route.name">
+      <div :key="route.name || 'defaultKey'">
         <component :is="Component" />
       </div>
     </Transition>
