@@ -74,7 +74,7 @@ const signinUser = async () => {
   } catch (error) {
     ElNotification({
       title: 'Error',
-      message: error,
+      message: error as string,
       type: 'error'
     })
   }
