@@ -19,7 +19,7 @@ const auth = getAuth()
 export const userLogin = defineStore('user', {
   state: () => ({}),
   actions: {
-    login(email: string, password: string) {
+    loginUser(email: string, password: string) {
       const persistence = setPersistence(auth, browserSessionPersistence).then(() => {
         return signInWithEmailAndPassword(auth, email, password)
           .then((response: any) => {

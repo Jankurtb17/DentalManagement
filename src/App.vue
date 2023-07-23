@@ -4,7 +4,12 @@ import { RouterView } from 'vue-router'
 
 <template>
   <div class="sign-reg">
-    <router-view name="SignIn" >
+    <router-view name="SignIn"  v-slot="{ Component, route }">
+      <Transition name="page-up" mode="out-in">
+      <div :key="route.name">
+        <component :is="Component" />
+      </div>
+    </Transition>
     </router-view>
   </div>
   <div>
@@ -13,7 +18,14 @@ import { RouterView } from 'vue-router'
 </template>
 
 <style scoped>
-.sign-reg {
-  /* height: 100vh; */
+.page-up-enter-active,
+.page-up-leave-active {
+  transition: 600ms ease all;
+}
+
+.page-up-enter-from,
+.page-up-leave-to {
+  opacity: 0;
+  transform: translateY(-100px);
 }
 </style>
