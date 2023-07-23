@@ -51,7 +51,7 @@ import {
   ElSkeleton,
   ElSkeletonItem,
   ElTimeSelect,
-  ElDrawer,
+  ElDrawer
 } from "element-plus";
 
 import {
@@ -141,6 +141,7 @@ export default (app: App): void => {
     .component("Add", CirclePlus)
     .component("View", View)
     .component("EditPen", EditPen)
+    .component("User", User)
     .component("User", User)
     .component("Close", Close)
     .component("UserFilled", UserFilled)
