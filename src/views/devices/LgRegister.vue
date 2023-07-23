@@ -2,7 +2,7 @@
   <div class="lg-login">
     <div class="layer-login">
       <div class="form">
-        <h1 class="header-title">Register!</h1>
+        <h1 class="header-title">Create an account</h1>
         <div class="google-signin" @click="googleLogin">
           <img src="@/assets/icons/GoogleIcon.svg" />
           <span>Continue with Google</span>
@@ -10,8 +10,10 @@
         <el-divider content-position="center">
           <span> or login using </span>
         </el-divider>
-        <el-form>
-          <el-form-item prop="Name">
+        <el-form 
+        :model="form"
+        :rules="rules">
+          <el-form-item prop="email">
             <label for="">Email</label>
             <el-input
               type="text"
@@ -20,7 +22,7 @@
               size="large"
             ></el-input>
           </el-form-item>
-          <el-form-item prop="Name">
+          <el-form-item prop="password">
             <label>Password</label>
             <el-input
               type="password"
@@ -30,7 +32,7 @@
             ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button class="btn-submit" color="#445ec1" size="large" primary @click="signinUser"
+            <el-button class="btn-submit" color="#445ec1" size="large" primary @click="signUp"
               >Sign In</el-button
             >
           </el-form-item>
@@ -56,22 +58,85 @@ import { reactive, ref } from 'vue'
 import userLogin from '@/stores/login'
 import type { FormItem } from '@/utils/Types'
 import { useRouter } from 'vue-router'
+import { ElNotification } from 'element-plus'
+import type { FormRules, FormInstance } from 'element-plus/es/components/index.js'
+import { formRules } from '@/utils/FormRules'
 const router = useRouter()
-const { googleLogin, loginUser } = userLogin()
+const { googleLogin, register } = userLogin()
+
 const form = reactive({
   email: '',
   password: ''
 } as FormItem)
 
-const signinUser = async () => {
-  await loginUser(form.email, form.password)
+const strongPassword = (rule: any, value: string, callback: any) => {
+  const hasUppercase = /[A-Z]/.test(value)
+  // Check if the password contains at least one special character (non-alphanumeric)
+  const hasSpecialChar = /[^A-Za-z0-9]/.test(value)
+  // Check if the password is at least 8 characters long
+  const isLongEnough = value.length >= 8;
+  // Return true if all conditions are met
+  if (!value) {
+    callback(new Error('Please enter a password'))
+  } else {
+    if (!hasUppercase) {
+      callback(new Error('Password must have an uppercase'))
+    } else if (hasUppercase && !hasSpecialChar) {
+      callback(new Error('Password must have an special character'))
+    } else if (hasUppercase && hasSpecialChar && !isLongEnough) {
+      callback(new Error('Password should be atleast 8 characters'))
+    } else {
+      callback()
+    }
+  }
+  callback()
 }
 
-const isRegister = ref(false)
+const validEmail = (rule: any, value: string, callback: any) => {
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
+  if(!value) {
+    callback(new Error("Please enter an email address"))
+  } else {
+    if(!emailPattern) {
+      callback(new Error("Please enter a valid email address"))
+    } else {
+      callback()
+    }
+  }
+}
+
+const rules = reactive<FormRules>({
+  email: [
+    {
+      validator: validEmail,
+      trigger: "blur"
+    }
+  ],
+  password: [
+    {
+      validator: strongPassword,
+      trigger: 'blur'
+    }
+  ]
+})
+
+const signUp = async (formEl: FormInstance | undefined) => {
+  try {
+    await register(form.email, form.password).then(() => {
+      router.push('/dashboard')
+    })
+  } catch (error) {
+    ElNotification({
+      title: 'Invalid',
+      type: 'error',
+      message: error
+    })
+  }
+}
+
 const moveImg = ref(false)
+
 const showRegister = () => {
-  // isRegister.value = !isRegister.value
-  // moveImg.value = !moveImg.value
   router.push('/sign-up')
 }
 </script>
