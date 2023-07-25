@@ -142,7 +142,6 @@ export default (app: App): void => {
     .component("View", View)
     .component("EditPen", EditPen)
     .component("User", User)
-    .component("User", User)
     .component("Close", Close)
     .component("UserFilled", UserFilled)
     .component("Download", Download)

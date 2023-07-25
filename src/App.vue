@@ -13,11 +13,19 @@ import { RouterView } from 'vue-router'
     </router-view>
   </div>
   <div>
+    <RouterView name="SignIn"/>
+  </div>
+  <div class="auth-content">
+    <RouterView name="SideMenu"/>
     <RouterView name="MainContent"/>
   </div>
 </template>
 
 <style scoped>
+.auth-content {
+  display: flex;
+  height: 100vh;
+}
 .page-up-enter-active,
 .page-up-leave-active {
   transition: 600ms ease all;
