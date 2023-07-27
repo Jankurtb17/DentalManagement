@@ -1,44 +1,88 @@
 <template>
   <el-row class="tac">
     <el-col :span="12">
-      <h5 class="mb-2">Custom colors</h5>
-      <el-menu
-        active-text-color="#ffd04b"
-        background-color="#545c64"
-        class="el-menu-vertical-demo"
-        default-active="2"
-        text-color="#fff"
-      >
-        <el-sub-menu index="1">
-          <template #title>
-            <el-icon><location /></el-icon>
-            <span>Navigator One</span>
-          </template>
-          <el-menu-item-group title="Group One">
-            <el-menu-item index="1-1">item one</el-menu-item>
-            <el-menu-item index="1-2">item two</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group title="Group Two">
-            <el-menu-item index="1-3">item three</el-menu-item>
-          </el-menu-item-group>
-          <el-sub-menu index="1-4">
-            <template #title>item four</template>
-            <el-menu-item index="1-4-1">item one</el-menu-item>
-          </el-sub-menu>
-        </el-sub-menu>
-        <el-menu-item index="2">
-          <el-icon><icon-menu /></el-icon>
-          <span>Navigator Two</span>
-        </el-menu-item>
-        <el-menu-item index="3" disabled>
-          <el-icon><document /></el-icon>
-          <span>Navigator Three</span>
-        </el-menu-item>
-        <el-menu-item index="4">
-          <el-icon><setting /></el-icon>
-          <span>Navigator Four</span>
-        </el-menu-item>
+      <el-menu class="el-menu-vertical-demo" :router="true" :default-active="$route.fullPath">
+        <div class="logo">
+          <img src="../assets/icons/MainLogo-2.svg" class="logo-img" />
+        </div>
+        <div class="menus">
+          <el-menu-item class="menu-items" index="/dashboard">
+            <el-icon><Histogram /></el-icon>
+            <span>Overview</span>
+          </el-menu-item>
+          <el-menu-item index="/calendar">
+            <el-icon><Calendar /></el-icon>
+            <span>Calendar</span>
+          </el-menu-item>
+          <el-menu-item index="/patient-list">
+            <el-icon><User /></el-icon>
+            <span>Patient List</span>
+          </el-menu-item>
+          <el-menu-item index="/payment">
+            <el-icon><CreditCard /></el-icon>
+            <span>Payment</span>
+          </el-menu-item>
+          <el-menu-item index="/settings">
+            <el-icon><Setting /></el-icon>
+            <span>Settings</span>
+          </el-menu-item>
+        </div>
+        <div class="profile-sidemenu">
+          <div>
+            <img src="" />
+            <div>
+              <span>Name</span>
+              <span>Position</span>
+            </div>
+          </div>
+        </div>
       </el-menu>
     </el-col>
   </el-row>
 </template>
+
+<style scoped>
+.el-menu-vertical-demo {
+  height: 100vh;
+  width: 270px;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  flex: 1;
+  display: flex;
+  padding: 5px;
+}
+
+.logo-img {
+  height: 70px;
+}
+.logo-text {
+  padding-left: 10px;
+}
+
+.menus {
+  flex: 10;
+}
+
+.is-active {
+  background-color: #445ec1;
+  color: #fff;
+}
+
+.el-menu-item :deep(span) {
+  font-weight: 500;
+}
+
+.profile-sidemenu {
+  border-top: 1px solid lightgray;
+}
+
+.el-menu-items {
+  display: flex;
+  align-items: center;
+}
+
+
+</style>

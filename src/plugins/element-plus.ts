@@ -79,7 +79,11 @@ import {
   SwitchButton,
   ArrowLeft,
   ArrowRight,
-  CircleCheck
+  CircleCheck,
+  Histogram,
+  Calendar,
+  CreditCard,
+  Setting
 } from "@element-plus/icons-vue";
 
 export default (app: App): void => {
@@ -142,7 +146,6 @@ export default (app: App): void => {
     .component("View", View)
     .component("EditPen", EditPen)
     .component("User", User)
-    .component("User", User)
     .component("Close", Close)
     .component("UserFilled", UserFilled)
     .component("Download", Download)
@@ -161,4 +164,8 @@ export default (app: App): void => {
     .component("SwitchButton", SwitchButton)
     .component("ArrowLeft", ArrowLeft)
     .component("ArrowRight", ArrowRight)
+    .component("Histogram", Histogram)
+    .component("Calendar", Calendar)
+    .component("CreditCard", CreditCard)
+    .component("Setting", Setting)
 }

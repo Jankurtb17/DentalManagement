@@ -59,7 +59,7 @@ import userLogin from '@/stores/login'
 import type { FormItem } from '@/utils/Types'
 import { useRouter } from 'vue-router'
 import { ElNotification } from 'element-plus'
-import type { FormRules, FormInstance } from 'element-plus/es/components/index.js'
+import type { FormRules, FormInstance } from 'element-plus'
 import { formRules } from '@/utils/FormRules'
 const router = useRouter()
 const { googleLogin, register } = userLogin()
@@ -129,7 +129,7 @@ const signUp = async (formEl: FormInstance | undefined) => {
     ElNotification({
       title: 'Invalid',
       type: 'error',
-      message: error
+      message: `${error}`
     })
   }
 }

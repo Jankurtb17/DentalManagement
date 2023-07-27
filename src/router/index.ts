@@ -7,7 +7,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      components: {
+       components: {
         SignIn: () => import("../views/HomeView.vue")
       }
     },
@@ -35,11 +35,31 @@ const router = createRouter({
     {
       path: '/dashboard',
       name: "dashboard",
+      meta: {
+        requiresAuth: true
+      },
       components: {
+        SideMenu: () => import("../components/SideMenu.vue"),
         MainContent: () => import("../views/AppDashboard.vue")
       }
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  const data = JSON.parse(sessionStorage.getItem("creds") as any)
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!data) {
+      next({
+        path: '/',
+        query: { redirect: to.fullPath }
+      })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+});
 
 export default router

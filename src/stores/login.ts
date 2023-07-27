@@ -5,13 +5,13 @@ import {
   browserSessionPersistence,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-	signOut,
-	GoogleAuthProvider,
-	signInWithPopup,
-	inMemoryPersistence,
-	sendPasswordResetEmail,
-	verifyPasswordResetCode,
-	confirmPasswordReset
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup,
+  inMemoryPersistence,
+  sendPasswordResetEmail,
+  verifyPasswordResetCode,
+  confirmPasswordReset
 } from 'firebase/auth'
 
 const auth = getAuth()
@@ -67,66 +67,59 @@ export const userLogin = defineStore('user', {
             throw err
           })
       })
-			return register
+      return register
     },
-		async logout() {
-			await signOut(auth)
-		},
-		googleLogin() {
-      const provider = new GoogleAuthProvider();
-      const google = setPersistence(auth, inMemoryPersistence).then(
-        () => {
-          return signInWithPopup(auth, provider)
-          .then(async (response: any) => {
-            sessionStorage.setItem("creds", JSON.stringify(response.user))
-          });
+    async logout() {
+      await signOut(auth)
+    },
+    googleLogin() {
+      const provider = new GoogleAuthProvider()
+      const google = signInWithPopup(auth, provider).then(async (response: any) => {
+        sessionStorage.setItem('creds', JSON.stringify(response.user))
+      })
+      return google
+    },
+    resetPassword(email: string) {
+      const reset = sendPasswordResetEmail(auth, email).catch((error) => {
+        let err = ''
+        switch (error.code) {
+          case '400':
+            err = 'Verification code invalid'
+            break
+          default:
+            err = 'Email or password is incorrect'
+            break
         }
-      );
-      return google;
-    },
-		resetPassword(email: string) {
-      const reset = sendPasswordResetEmail(auth, email)
-        .catch((error) => {
-          let err = "";
-          switch (error.code) {
-            case "400":
-              err = "Verification code invalid";
-              break;
-            default:
-              err = "Email or password is incorrect";
-              break;
-          }
-          throw err;
-        })
-      return reset;
+        throw err
+      })
+      return reset
     },
     verifyPassword(newPassword: string) {
       const verify = verifyPasswordResetCode(auth, newPassword)
         .then((response) => {
-          localStorage.setItem("creds", JSON.stringify(auth))
+          localStorage.setItem('creds', JSON.stringify(auth))
         })
-        .catch((error) => { 
+        .catch((error) => {
           console.log(error)
-          throw error;
+          throw error
         })
-        return verify;
+      return verify
     },
     changePassword(oobCode: string, password: string) {
-      const changePass = confirmPasswordReset(auth, oobCode, password)
-      .catch((error) => { 
+      const changePass = confirmPasswordReset(auth, oobCode, password).catch((error) => {
         console.log(error)
-        throw error;
+        throw error
       })
-      return changePass;
-    },
+      return changePass
+    }
   },
-	getters: {
+  getters: {
     generateVerificationCode() {
       const min = 100000
       const max = 999999
       return Math.floor(Math.random() * (max - min + 1)) + min
     }
-	}
+  }
 })
 
-export default userLogin;
+export default userLogin
