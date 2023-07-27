@@ -4,7 +4,7 @@
       <transition name="slide-right">
         <div class="form" v-if="!isRegister">
           <h1 class="header-title">Welcome!</h1>
-          <div class="google-signin" @click="googleLogin">
+          <div class="google-signin" @click="userGoogleLogin">
             <img src="@/assets/icons/GoogleIcon.svg" />
             <span>Continue with Google</span>
           </div>
@@ -78,6 +78,13 @@ const signinUser = async () => {
       type: 'error'
     })
   }
+}
+
+const userGoogleLogin = async () => {
+  googleLogin()
+    .then(() => {
+      router.push("/dashboard")
+    })
 }
 
 const isRegister = ref(false)

@@ -3,7 +3,7 @@ import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <div class="sign-reg">
+  <div class="sign-reg" v-if="$route.meta.login">
     <router-view name="SignIn"  v-slot="{ Component, route }">
       <Transition name="page-up" mode="out-in">
       <div :key="route.name || 'defaultKey'">
@@ -12,10 +12,7 @@ import { RouterView } from 'vue-router'
     </Transition>
     </router-view>
   </div>
-  <div>
-    <RouterView name="SignIn"/>
-  </div>
-  <div class="auth-content">
+  <div class="auth-content" v-else>
     <RouterView name="SideMenu"/>
     <RouterView name="MainContent"/>
   </div>
