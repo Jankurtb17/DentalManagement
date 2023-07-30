@@ -14,7 +14,9 @@ import { RouterView } from 'vue-router'
   </div>
   <div class="auth-content" v-else>
     <RouterView name="SideMenu"/>
-    <RouterView name="MainContent"/>
+    <div class="main-content">
+      <RouterView name="MainContent"/>
+    </div>
   </div>
 </template>
 
@@ -32,5 +34,10 @@ import { RouterView } from 'vue-router'
 .page-up-leave-to {
   opacity: 0;
   transform: translateY(-100px);
+}
+
+.main-content {
+  background-color: #E9EBF0;
+  width: 100%;
 }
 </style>

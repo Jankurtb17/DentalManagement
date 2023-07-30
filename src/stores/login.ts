@@ -8,6 +8,7 @@ import {
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithRedirect,
   inMemoryPersistence,
   sendPasswordResetEmail,
   verifyPasswordResetCode,
@@ -72,10 +73,24 @@ export const userLogin = defineStore('user', {
     async logout() {
       await signOut(auth)
     },
-    googleLogin() {
+     googleLogin() {
       const provider = new GoogleAuthProvider()
-      const google = signInWithPopup(auth, provider).then(async (response: any) => {
-        sessionStorage.setItem('creds', JSON.stringify(response.user))
+      const google =  signInWithPopup(auth, provider)
+      .then(async (response: any) => {
+        const credential = GoogleAuthProvider.credentialFromResult(response);
+        const token = credential?.accessToken;
+        const user = response.user;
+        sessionStorage.setItem('creds', JSON.stringify(user))
+        sessionStorage.setItem('token', JSON.stringify(token))
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        throw error
       })
       return google
     },

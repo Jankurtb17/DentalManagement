@@ -12,6 +12,7 @@ import 'firebase/compat/firestore';
 const firebaseConfig = {
   apiKey: "AIzaSyDnE19VQ3Bbkf9hgLQbpZ01vw8w3Vpj5KI",
   authDomain: "dental-mngt.firebaseapp.com",
+  // authDomain: "localhost:5173/",
   projectId: "dental-mngt",
   storageBucket: "dental-mngt.appspot.com",
   messagingSenderId: "463557927177",
