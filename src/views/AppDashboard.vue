@@ -14,11 +14,35 @@
               <el-col>
                 <CardComponent>
                   <template #header> Patients </template>
+                  <template #body>
+                    <div class="patients">
+                      <div class="patients-stats">
+                        <div class="statistic-card">
+                          <div>
+                            <span>Total Patients this Month</span>
+                            <h5 class="count">10</h5>
+                          </div>
+                        </div>
+                        <div class="statistic-card">
+                          <div>
+                            <span>Total Patients All Time</span>
+                            <h5 class="count">120</h5>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-body">
+                        <div class="card-more">
+                          <span>More</span>
+                          <el-button type="primary" :icon="ArrowRight" circle />
+                        </div>
+                      </div>
+                    </div>
+                  </template>
                 </CardComponent>
               </el-col>
             </el-row>
             <el-row>
-              <el-col >
+              <el-col>
                 <CardComponent>
                   <template #header> Age Group </template>
                 </CardComponent>
@@ -32,9 +56,7 @@
           <el-row>
             <el-col>
               <CardComponent>
-                <template #header>
-                  Upcoming Appointment
-                </template>
+                <template #header> Upcoming Appointment </template>
                 <template #body>
                   <h5 class="count">51</h5>
                   <div class="card-body">
@@ -43,7 +65,7 @@
                       <el-button type="primary" :icon="ArrowRight" circle />
                     </div>
                     <div class="card-img">
-                      <img src="../assets/dot.svg" alt="">
+                      <img src="../assets/dot.svg" alt="" />
                     </div>
                   </div>
                 </template>
@@ -54,20 +76,17 @@
           <el-row>
             <el-col>
               <CardComponent>
-                <template #header>
-                  Approval Appointment
-                </template>
+                <template #header> Approval Appointment </template>
                 <template #body>
                   <h5 class="count">51</h5>
                   <div class="card-body">
-
                     <div class="card-more">
                       <span>More</span>
-                      <el-button type="primary" :icon="ArrowRight"  circle />
+                      <el-button type="primary" :icon="ArrowRight" circle />
                     </div>
                     <div class="card-img">
-                        <img src="../assets/dot.svg" alt="">
-                      </div>
+                      <img src="../assets/dot.svg" alt="" />
+                    </div>
                   </div>
                 </template>
               </CardComponent>
@@ -77,9 +96,7 @@
           <el-row>
             <el-col>
               <CardComponent>
-                <template #header>
-                  Today's Appointment
-                </template>
+                <template #header> Today's Appointment </template>
               </CardComponent>
             </el-col>
           </el-row>
@@ -93,7 +110,7 @@
 import ChartComponent from '@/components/ChartComponent.vue'
 import CardComponent from '@/components/CardComponent.vue'
 import BaseLayout from '@/base/BaseLayout.vue'
-import { ArrowRight } from  '@element-plus/icons-vue'
+import { ArrowRight } from '@element-plus/icons-vue'
 </script>
 
 <style scoped>
@@ -108,8 +125,7 @@ import { ArrowRight } from  '@element-plus/icons-vue'
   height: 98vh;
   display: grid;
   grid-template-rows: 580px;
- }
-
+}
 
 .left-card-patients {
   display: grid;
@@ -126,8 +142,14 @@ import { ArrowRight } from  '@element-plus/icons-vue'
   gap: 20px;
 }
 
+.patients-stats {
+  display: flex;
+  gap: 50px;
+  margin-bottom: 30px;
+}
+
 .count {
-  color: #A7A7A7;
+  color: #a7a7a7;
   font-size: 2.5em;
 }
 
@@ -145,7 +167,7 @@ import { ArrowRight } from  '@element-plus/icons-vue'
 }
 
 .card-more {
-  background-color: #DEE5F1;
+  background-color: #dee5f1;
   width: 60%;
   height: 40px;
   display: flex;
@@ -154,6 +176,4 @@ import { ArrowRight } from  '@element-plus/icons-vue'
   border-radius: 20px;
   justify-content: space-between;
 }
-
-
 </style>
