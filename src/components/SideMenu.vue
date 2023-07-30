@@ -28,18 +28,26 @@
           </el-menu-item>
         </div>
         <div class="profile-sidemenu">
-          <div>
-            <img src="" />
-            <div>
-              <span>Name</span>
-              <span>Position</span>
-            </div>
+          <el-avatar :src="circleUrl" />
+          <div class="lower-name">
+            <span class="name">Jan Kurt D. Bayaras</span>
+            <span class="position">Administrator</span>
           </div>
         </div>
       </el-menu>
     </el-col>
   </el-row>
 </template>
+
+<script lang="ts" setup>
+import { reactive, toRefs } from 'vue'
+
+const state = reactive({
+  circleUrl: '../assets/img/administrator.jpg'
+})
+
+const { circleUrl } = toRefs(state)
+</script>
 
 <style scoped>
 .el-menu-vertical-demo {
@@ -66,6 +74,7 @@
   flex: 10;
 }
 
+
 .is-active {
   background-color: #445ec1;
   color: #fff;
@@ -77,6 +86,24 @@
 
 .profile-sidemenu {
   border-top: 1px solid lightgray;
+  display: flex;
+  flex-direction: row;
+  padding: 20px 10px;
+  gap: 15px;
+  align-items: center;
+}
+
+.lower-name {
+  display: flex;
+  flex-direction: column;
+}
+
+.lower-name .name {
+  font-size: 17px;
+}
+
+.lower-name .position {
+  color: rgb(100, 98, 98);
 }
 
 .el-menu-items {

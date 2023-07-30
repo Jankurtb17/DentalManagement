@@ -51,7 +51,9 @@ import {
   ElSkeleton,
   ElSkeletonItem,
   ElTimeSelect,
-  ElDrawer
+  ElDrawer,
+  ElStatistic,
+  ElAvatar
 } from "element-plus";
 
 import {
@@ -83,7 +85,8 @@ import {
   Histogram,
   Calendar,
   CreditCard,
-  Setting
+  Setting,
+  
 } from "@element-plus/icons-vue";
 
 export default (app: App): void => {
@@ -139,6 +142,8 @@ export default (app: App): void => {
     .use(ElTimelineItem)
     .use(ElSelect)
     .use(ElDrawer)
+    .use(ElStatistic)
+    .use(ElAvatar)
     .component("el-icon-zoomin", ZoomIn)
     .component("Edit", Edit)
     .component("Delete", Delete)

@@ -9,6 +9,9 @@ const router = createRouter({
       name: 'home',
        components: {
         SignIn: () => import("../views/HomeView.vue")
+      },
+      meta: {
+        login: true,
       }
     },
     {
@@ -16,6 +19,9 @@ const router = createRouter({
       name: 'login',
       components: {
         SignIn: () => import("../views/SignIn.vue")
+      },
+      meta: {
+        login: true,
       }
     },
     {
@@ -23,6 +29,9 @@ const router = createRouter({
       name: 'signup',
       components: {
         SignIn: () => import("../views/SignUp.vue")
+      },
+      meta: {
+        login: true,
       }
     },
     {
@@ -30,11 +39,26 @@ const router = createRouter({
       name: 'signup-lg',
       components: {
         SignIn: () => import("../views/devices/LgRegister.vue")
+      },
+      meta: {
+        login: true,
       }
     },
     {
       path: '/dashboard',
       name: "dashboard",
+      meta: {
+        requiresAuth: true,
+        login: false
+      },
+      components: {
+        SideMenu: () => import("../components/SideMenu.vue"),
+        MainContent: () => import("../views/AppDashboard.vue")
+      }
+    },
+    {
+      path: '/settings',
+      name: "settings",
       meta: {
         requiresAuth: true
       },
@@ -42,7 +66,40 @@ const router = createRouter({
         SideMenu: () => import("../components/SideMenu.vue"),
         MainContent: () => import("../views/AppDashboard.vue")
       }
-    }
+    },
+    {
+      path: '/calendar',
+      name: "calendar",
+      meta: {
+        requiresAuth: true
+      },
+      components: {
+        SideMenu: () => import("../components/SideMenu.vue"),
+        MainContent: () => import("../views/AppDashboard.vue")
+      }
+    },
+    {
+      path: '/patient-list',
+      name: "patinet-list",
+      meta: {
+        requiresAuth: true
+      },
+      components: {
+        SideMenu: () => import("../components/SideMenu.vue"),
+        MainContent: () => import("../views/AppDashboard.vue")
+      }
+    },
+    {
+      path: '/payment',
+      name: "payment",
+      meta: {
+        requiresAuth: true
+      },
+      components: {
+        SideMenu: () => import("../components/SideMenu.vue"),
+        MainContent: () => import("../views/AppDashboard.vue")
+      }
+    },
   ]
 })
 
