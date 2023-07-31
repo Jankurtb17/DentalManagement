@@ -5,17 +5,6 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps<{
-  options: {
-    type: any
-  },
-  headers: {
-    type: string[]
-  },
-  data: {
-    type: Array<any>
-  }
-}>()
 import { use } from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { PieChart, BarChart } from 'echarts/charts'
@@ -28,6 +17,31 @@ import {
 } from 'echarts/components'
 import VChart, { THEME_KEY } from 'vue-echarts'
 import { ref, provide } from 'vue'
+const props = defineProps<{
+  options: Chart,
+}>()
+
+type Chart = {
+  tooltip: any,
+  title: {
+    text: string,
+    left: string,
+  },
+  xAxis: {
+    type: string,
+    data: Array<any>,
+    axisLabel: any,
+  },
+  yAxis: {
+    type: string
+  },
+  legend: {
+    orient: string,
+    left: string,
+    data: Array<any>
+  },
+  series: any
+}
 
 use([
   CanvasRenderer,
