@@ -8,7 +8,7 @@
       <div class="dashboard">
         <!-- Left cards -->
         <div class="left-card">
-          <ChartComponent />
+          <ChartComponent :options="barOption" />
           <div class="left-card-patients">
             <el-row :gutter="20">
               <el-col>
@@ -111,6 +111,80 @@ import ChartComponent from '@/components/ChartComponent.vue'
 import CardComponent from '@/components/CardComponent.vue'
 import BaseLayout from '@/base/BaseLayout.vue'
 import { ArrowRight } from '@element-plus/icons-vue'
+import { ref } from 'vue'
+
+const barHeaders = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
+]
+
+const header = barHeaders.map((item) => item)
+const barDataSet = [
+  { value: 10, name: 'January' },
+  { value: 5, name: 'February' },
+  { value: 8, name: 'March' },
+  { value: 21, name: 'April' },
+  { value: 20, name: 'May' },
+  { value: 29, name: 'June' },
+  { value: 31, name: 'July' },
+  { value: 36, name: 'August' },
+  { value: 21, name: 'September' },
+  { value: 20, name: 'October' },
+  { value: 40, name: 'November' },
+  { value: 33, name: 'December' }
+]
+const barOption = ref({
+  tooltip: {},
+  title: {
+      text: 'Total Patients by month',
+      left: 'center'
+    },
+  xAxis: {
+    type: 'category',
+    data: header,
+    axisLabel: {
+      interval: 0, // This will display all labels.
+      textStyle: {
+        fontSize: 10 // Adjust font size if needed.
+      }
+    }
+  },
+  yAxis: {
+    type: 'value'
+  },
+  legend: {
+    orient: 'vertical',
+    left: 'left',
+    data: header
+  },
+  series: [
+    {
+      name: 'Total patients by month',
+      type: 'bar',
+      backgroundStyle: {
+        color: 'rgba(180, 180, 180, 0.2)'
+      },
+      data: barDataSet,
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      }
+    }
+  ]
+})
 </script>
 
 <style scoped>

@@ -1,95 +1,50 @@
 <template>
-  <div class="chart" >
-    <el-row>
-      <canvas id="myChart"></canvas>
-    </el-row>
+  <div class="chart-container">
+    <v-chart class="chart" :option="props.options" autoresize />
   </div>
 </template>
 
 <script lang="ts" setup>
-import Chart from 'chart.js/auto'
-import { ref, onMounted } from 'vue'
-const data = ref([
-  { month: 'January', count: 10 },
-  { month: 'February', count: 20 },
-  { month: 'March', count: 30 },
-  { month: 'April', count: 40 },
-  { month: 'May', count: 50 },
-  { month: 'June', count: 40 },
-  { month: 'July', count: 30 },
-  { month: 'August', count: 50 },
-  { month: 'September', count: 60 },
-  { month: 'October', count: 80 },
-  { month: 'November', count: 20 },
-  { month: 'December', count: 50 }
+const props = defineProps<{
+  options: {
+    type: any
+  },
+  headers: {
+    type: string[]
+  },
+  data: {
+    type: Array<any>
+  }
+}>()
+import { use } from 'echarts/core'
+import { CanvasRenderer } from 'echarts/renderers'
+import { PieChart, BarChart } from 'echarts/charts'
+import {
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+  GridComponent,
+  GridSimpleComponent
+} from 'echarts/components'
+import VChart, { THEME_KEY } from 'vue-echarts'
+import { ref, provide } from 'vue'
+
+use([
+  CanvasRenderer,
+  PieChart,
+  BarChart,
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+  GridComponent
 ])
 
-const dataSet = {
-  labels: data.value.map((row) => row.month),
-  datasets: [
-    {
-      label: `Total Patients`,
-      data: data.value.map((row) => row.count),
-      backgroundColor: '#9BD0F5',
-      borderWidth: 1,
-      color: '#000',
-    }
-  ]
-}
-
-const options = {
-  // Customize text color for different elements
-  plugins: {
-    title: {
-      display: true,
-      text: 'Total Patients by month in the year of 2023',
-      color: 'white' // Change the title text color to red
-    },
-    legend: {
-      labels: {
-        color: 'white' // Change the legend text color to blue
-      }
-    },
-    tooltip: {
-      callbacks: {
-        labelColor: () => {
-          return {
-            borderColor: 'rgba(0, 0, 0, 0)',
-            backgroundColor: 'orange' // Change tooltip background color to orange
-          }
-        }
-      }
-    }
-  },
-  scales: {
-    x: {
-      ticks: {
-        color: 'white' // Change x-axis label text color to green
-      }
-    },
-    y: {
-      ticks: {
-        color: 'white' // Change y-axis label text color to purple
-      }
-    }
-  }
-}
-
-// Create the chart
-
-onMounted(() => {
-  const ctx = document.getElementById('myChart') as any
-  const myChart = new Chart(ctx, {
-    type: 'bar',
-    data: dataSet,
-    options: options
-  })
-})
+provide(THEME_KEY, 'dark')
 </script>
 
 <style scoped>
 .chart {
-  background-color: #152443;
-  margin-bottom: 20px;
+  /* height: 100vh; */
+  height: 98%;
 }
 </style>
