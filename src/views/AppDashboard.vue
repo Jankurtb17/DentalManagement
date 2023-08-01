@@ -137,8 +137,12 @@ import ChartComponent from '@/components/ChartComponent.vue'
 import CardComponent from '@/components/CardComponent.vue'
 import BaseLayout from '@/base/BaseLayout.vue'
 import { ArrowRight } from '@element-plus/icons-vue'
-import { ref } from 'vue'
+import { ref, reactive, toRefs } from 'vue'
+const state = reactive({
+  circleUrl: '../assets/img/administrator.jpg'
+})
 
+const { circleUrl } = toRefs(state)
 const barHeaders = [
   'January',
   'February',
