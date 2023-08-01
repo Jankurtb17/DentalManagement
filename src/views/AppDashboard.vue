@@ -44,7 +44,14 @@
             <el-row>
               <el-col>
                 <CardComponent>
-                  <template #header> Age Group </template>
+                  <template #header> Top Treatment </template>
+                  <template #body>
+                    <div class="text-body">
+                      <h1>1. Root Canal</h1>
+                      <h1>2. Wisdom Teeth Removal</h1>
+                      <h1>3. Consultation</h1>
+                    </div>
+                  </template>
                 </CardComponent>
               </el-col>
             </el-row>
@@ -97,6 +104,25 @@
             <el-col>
               <CardComponent>
                 <template #header> Today's Appointment </template>
+                <template #body>
+                  <el-scrollbar height="20vh">
+                    <div class="profile-sidemenu">
+                      <el-avatar :src="circleUrl" />
+                      <div class="lower-name">
+                        <span class="name">Jan Kurt D. Bayaras</span>
+                        <span class="position">Administrator</span>
+                      </div>
+                    </div>
+                    <el-divider />
+                    <div class="profile-sidemenu">
+                      <el-avatar :src="circleUrl" />
+                      <div class="lower-name">
+                        <span class="name">Jan Kurt D. Bayaras</span>
+                        <span class="position">Administrator</span>
+                      </div>
+                    </div>
+                  </el-scrollbar>
+                </template>
               </CardComponent>
             </el-col>
           </el-row>
@@ -111,8 +137,12 @@ import ChartComponent from '@/components/ChartComponent.vue'
 import CardComponent from '@/components/CardComponent.vue'
 import BaseLayout from '@/base/BaseLayout.vue'
 import { ArrowRight } from '@element-plus/icons-vue'
-import { ref } from 'vue'
+import { ref, reactive, toRefs } from 'vue'
+const state = reactive({
+  circleUrl: '../assets/img/administrator.jpg'
+})
 
+const { circleUrl } = toRefs(state)
 const barHeaders = [
   'January',
   'February',
@@ -143,12 +173,27 @@ const barDataSet = [
   { value: 40, name: 'November' },
   { value: 33, name: 'December' }
 ]
+
+const barDataCancelledSet = [
+  { value: 5, name: 'January' },
+  { value: 3, name: 'February' },
+  { value: 10, name: 'March' },
+  { value: 5, name: 'April' },
+  { value: 4, name: 'May' },
+  { value: 7, name: 'June' },
+  { value: 8, name: 'July' },
+  { value: 5, name: 'August' },
+  { value: 4, name: 'September' },
+  { value: 9, name: 'October' },
+  { value: 8, name: 'November' },
+  { value: 4, name: 'December' }
+]
 const barOption = ref({
   tooltip: {},
   title: {
-      text: 'Total Patients by month',
-      left: 'center'
-    },
+    text: 'Total Patients by month',
+    left: 'center'
+  },
   xAxis: {
     type: 'category',
     data: header,
@@ -169,12 +214,27 @@ const barOption = ref({
   },
   series: [
     {
-      name: 'Total patients by month',
+      name: 'Appointments',
       type: 'bar',
       backgroundStyle: {
         color: 'rgba(180, 180, 180, 0.2)'
       },
       data: barDataSet,
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      }
+    },
+    {
+      name: 'Cancelled',
+      type: 'bar',
+      backgroundStyle: {
+        color: 'rgba(245, 40, 145, 0.8)'
+      },
+      data: barDataCancelledSet,
       emphasis: {
         itemStyle: {
           shadowBlur: 10,
@@ -209,6 +269,10 @@ const barOption = ref({
   padding-bottom: 30px;
 }
 
+.left-card .text-body {
+  color: gray;
+}
+
 .right-card {
   display: grid;
   grid-template-rows: 250px 250px 2fr;
@@ -238,6 +302,27 @@ const barOption = ref({
   top: 20;
   left: 10px;
   height: 80%;
+}
+
+.right-card .profile-sidemenu {
+  display: flex;
+  flex-direction: row;
+  padding: 5px 5px;
+  gap: 15px;
+  align-items: center;
+}
+
+.lower-name {
+  display: flex;
+  flex-direction: column;
+}
+
+.lower-name .name {
+  font-size: 17px;
+}
+
+.lower-name .position {
+  color: rgb(100, 98, 98);
 }
 
 .card-more {

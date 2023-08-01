@@ -37,7 +37,7 @@ import { RouterView } from 'vue-router'
 }
 
 .main-content {
-  background-color: #E9EBF0;
+  background-color: #F2F5FA;
   width: 100%;
 }
 </style>
