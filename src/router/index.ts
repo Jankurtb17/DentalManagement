@@ -75,7 +75,7 @@ const router = createRouter({
       },
       components: {
         SideMenu: () => import("../components/SideMenu.vue"),
-        MainContent: () => import("../views/AppDashboard.vue")
+        MainContent: () => import("../views/AppCalendar.vue")
       }
     },
     {
