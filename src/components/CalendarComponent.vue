@@ -1,20 +1,27 @@
 <template>
   <div class="calendar">
-    <FullCalendar class="calendar" :options="calendarOptions" @dateClick="handleDateClick">
-      <template v-slot:eventContent='arg'>
-      <b>{{ arg.event.title }}</b>
-    </template>
+    <FullCalendar 
+      ref="calendar"
+      class="calendar" :options="calendarOptions" 
+      v-bind="$attrs"
+      @eventClick="handleEventClick"
+      >
+      <template v-slot:eventContent="arg">
+        <b>{{ arg.event.title }}</b>
+      </template>
 
-      <el-scrollbar height="90vh">
-      </el-scrollbar>
+      <el-scrollbar height="90vh"> </el-scrollbar>
     </FullCalendar>
   </div>
 
-  <AppModal title="Create an Event" v-model="isOpen">
+  <AppModal title="Appointment" v-model="isOpen">
     <template #body>
-      <el-form :model="form">
-        <el-form-item label="Event name">
-          <el-input v-model="form.name"></el-input>
+      <el-form ref="formRules" :rules="rules" :model="form" status-icon>
+        <el-form-item prop="name">
+          <el-input v-model="form.name" placeholder="Add title"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="saveAppointment">Save</el-button>
         </el-form-item>
       </el-form>
     </template>
@@ -23,11 +30,12 @@
 
 <script lang="ts" setup>
 import { uuid } from 'vue-uuid'
+import type { FormInstance, FormRules } from 'element-plus'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import AppModal from "./AppModal.vue"
+import AppModal from './AppModal.vue'
 import type {
   CalendarOptions,
   EventApi,
@@ -35,10 +43,27 @@ import type {
   DateSelectArg,
   EventClickArg
 } from '@fullcalendar/core'
-import { reactive, ref } from 'vue'
-const form = reactive({
+import { reactive, ref, watch } from 'vue'
+
+const rules = reactive<FormRules>({
+  name: [
+    {
+      trigger: 'blur',
+      required: true,
+      message: 'Please enter a label'
+    }
+  ]
+})
+
+interface FormType {
+  name: string
+}
+const calendar = ref()
+const formRules = ref()
+const form = reactive<FormType>({
   name: ''
 })
+const isSaved = ref(false)
 let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
 const isOpen = ref(false)
 const INITIAL_EVENT = ref([
@@ -54,6 +79,9 @@ const INITIAL_EVENT = ref([
     start: todayStr + 'T12:00:00'
   }
 ])
+const startDate = ref("")
+const endDate = ref("")
+const allDay = ref(false)
 
 const currentEvents = ref([{ title: 'Meeting', start: new Date() }] as EventApi[])
 const calendarOptions = reactive({
@@ -84,24 +112,37 @@ function handleEventClick(clickInfo: EventClickArg) {
   }
 }
 
-const handleDateClick = (info: any) => {
-  isOpen.value = !isOpen.value
-}
-
 function handleDateSelect(selectInfo: DateSelectArg) {
   isOpen.value = !isOpen.value
   let calendarApi = selectInfo.view.calendar
-  calendarApi.unselect() // clear date selection
-  if (!isOpen.value) {
-    calendarApi.addEvent({
-      id: uuid.v4(),
-      title: form.name,
-      start: selectInfo.startStr,
-      end: selectInfo.endStr,
-      allDay: selectInfo.allDay
-    })
-  }
+  startDate.value = selectInfo.startStr
+  endDate.value = selectInfo.endStr
+  allDay.value = selectInfo?.allDay
+  calendarApi.unselect()
 }
+
+const saveAppointment = (info: DateSelectArg) => {
+  isSaved.value = true
+  const calendarApi = calendar.value.getApi()
+  if(formRules.value === undefined) return
+  formRules.value.validate(async (isValid: any) => {
+    if(isValid) {
+      if(calendarApi) {
+        const newEvent = {
+          id: uuid.v4(),
+          title: form.name,
+          start: startDate.value,
+          end: endDate.value,
+          allDay: allDay.value
+        }
+        calendarApi.addEvent(newEvent)
+        form.name = ''
+        isOpen.value = false
+      }
+    }
+  })
+}
+
 </script>
 
 <style scoped>
@@ -117,10 +158,25 @@ function handleDateSelect(selectInfo: DateSelectArg) {
   pointer-events: none;
 }
 
+.time-range {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: flex-end;
+}
 </style>
 
 <style>
-.fc .fc-daygrid-day.fc-day-today, .fc .fc-timegrid-col.fc-day-today{
+.el-form-item__content {
+  display: flex;
+  justify-content: flex-end;
+}
+.fc .fc-daygrid-day.fc-day-today,
+.fc .fc-timegrid-col.fc-day-today {
   background-color: #fff; /* Replace with your desired blueish color */
 }
 </style>
