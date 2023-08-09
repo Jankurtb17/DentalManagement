@@ -1,11 +1,12 @@
 <template>
   <div class="calendar">
-    <FullCalendar 
+    <FullCalendar
       ref="calendar"
-      class="calendar" :options="calendarOptions" 
+      class="calendar"
+      :options="calendarOptions"
       v-bind="$attrs"
       @eventClick="handleEventClick"
-      >
+    >
       <template v-slot:eventContent="arg">
         <b>{{ arg.event.title }}</b>
       </template>
@@ -79,8 +80,8 @@ const INITIAL_EVENT = ref([
     start: todayStr + 'T12:00:00'
   }
 ])
-const startDate = ref("")
-const endDate = ref("")
+const startDate = ref('')
+const endDate = ref('')
 const allDay = ref(false)
 
 const currentEvents = ref([{ title: 'Meeting', start: new Date() }] as EventApi[])
@@ -103,7 +104,8 @@ const calendarOptions = reactive({
   initialEvents: INITIAL_EVENT,
   select: handleDateSelect,
   eventClick: handleEventClick,
-  events: currentEvents.value
+  events: currentEvents.value,
+  nowIndicator: true
 } as CalendarOptions)
 
 function handleEventClick(clickInfo: EventClickArg) {
@@ -124,10 +126,10 @@ function handleDateSelect(selectInfo: DateSelectArg) {
 const saveAppointment = (info: DateSelectArg) => {
   isSaved.value = true
   const calendarApi = calendar.value.getApi()
-  if(formRules.value === undefined) return
+  if (formRules.value === undefined) return
   formRules.value.validate(async (isValid: any) => {
-    if(isValid) {
-      if(calendarApi) {
+    if (isValid) {
+      if (calendarApi) {
         const newEvent = {
           id: uuid.v4(),
           title: form.name,
@@ -142,7 +144,6 @@ const saveAppointment = (info: DateSelectArg) => {
     }
   })
 }
-
 </script>
 
 <style scoped>
@@ -178,5 +179,13 @@ const saveAppointment = (info: DateSelectArg) => {
 .fc .fc-daygrid-day.fc-day-today,
 .fc .fc-timegrid-col.fc-day-today {
   background-color: #fff; /* Replace with your desired blueish color */
+}
+
+.fc-timegrid-event-harness, .fc-daygrid-day-events {
+  margin: 0 15px;
+}
+
+.fc-timegrid-now-indicator-arrow {
+  border-radius: 50px;
 }
 </style>
