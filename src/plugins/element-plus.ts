@@ -53,7 +53,10 @@ import {
   ElTimeSelect,
   ElDrawer,
   ElStatistic,
-  ElAvatar
+  ElAvatar,
+  ElBreadcrumb,
+  ElBreadcrumbItem,
+  ElPopover
 } from "element-plus";
 
 import {
@@ -86,7 +89,8 @@ import {
   Calendar,
   CreditCard,
   Setting,
-  
+  Printer,
+  More
 } from "@element-plus/icons-vue";
 
 export default (app: App): void => {
@@ -144,6 +148,9 @@ export default (app: App): void => {
     .use(ElDrawer)
     .use(ElStatistic)
     .use(ElAvatar)
+    .use(ElBreadcrumb)
+    .use(ElBreadcrumbItem)
+    .use(ElPopover)
     .component("el-icon-zoomin", ZoomIn)
     .component("Edit", Edit)
     .component("Delete", Delete)
@@ -173,4 +180,6 @@ export default (app: App): void => {
     .component("Calendar", Calendar)
     .component("CreditCard", CreditCard)
     .component("Setting", Setting)
+    .component("Printer", Printer)
+    .component("More", More)
 }

@@ -80,13 +80,26 @@ const router = createRouter({
     },
     {
       path: '/patient-list',
-      name: "patinet-list",
+      name: "patient-list",
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        hasTwoHeader: true
       },
       components: {
         SideMenu: () => import("../components/SideMenu.vue"),
-        MainContent: () => import("../views/AppDashboard.vue")
+        MainContent: () => import("../views/PatientList.vue")
+      }
+    },
+    {
+      path: '/patient-list/:patient_id',
+      name: "patient-info",
+      meta: {
+        requiresAuth: true,
+        hasTwoHeader: true
+      },
+      components: {
+        SideMenu: () => import("../components/SideMenu.vue"),
+        MainContent: () => import("../components/PatientInfo.vue")
       }
     },
     {
