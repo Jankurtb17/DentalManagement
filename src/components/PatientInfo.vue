@@ -31,14 +31,14 @@
                 <span>j.kurtbayaras@gmail.com</span>
               </div>
             </el-card>
-            <el-card >
+            <el-card>
               <div class="patient-info">
                 <div class="patient-data">
                   <div class="data">
                     <span class="header">Gender</span>
                     <span>Male</span>
                   </div>
-                  <div  class="data">
+                  <div class="data">
                     <span class="header">Date of Birth</span>
                     <span>Dec 30, 1997</span>
                   </div>
@@ -47,13 +47,13 @@
                     <span>09565011210</span>
                   </div>
                 </div>
-  
+
                 <div class="patient-data">
                   <div class="data">
                     <span class="header">Street Address</span>
                     <span>9391 Felipe</span>
                   </div>
-                  <div  class="data">
+                  <div class="data">
                     <span class="header">Barangay</span>
                     <span>Guadalupe Nuevo</span>
                   </div>
@@ -68,7 +68,7 @@
                     <span class="header">Country</span>
                     <span>Philippines</span>
                   </div>
-                  <div  class="data">
+                  <div class="data">
                     <span class="header">Zip code</span>
                     <span>1212</span>
                   </div>
@@ -76,7 +76,12 @@
               </div>
             </el-card>
           </div>
-          <div class="appointments"></div>
+          <el-card>
+            <el-tabs tab-position="top" class="demo-tabs">
+              <el-tab-pane label="Appointment">Appointment</el-tab-pane>
+              <el-tab-pane label="Medical Records">Medical Records</el-tab-pane>
+            </el-tabs>
+          </el-card>
         </div>
         <div class="card-two">
           <el-card>
@@ -84,13 +89,18 @@
               <span class="header">Notes</span>
               <el-form>
                 <el-form-item>
-                  <el-input v-model="notes" type="textarea" class="no-resize" :rows="10" />
+                  <el-input v-model="notes" type="textarea" class="no-resize" :rows="12" disabled />
+                </el-form-item>
+                <el-form-item class="btn">
+                  <el-button type="primary">Update Notes</el-button>
                 </el-form-item>
               </el-form>
             </div>
           </el-card>
 
-          <div class="files"></div>
+          <el-card>
+            
+          </el-card>
         </div>
       </div>
     </template>
@@ -172,11 +182,10 @@ const { circleUrl } = toRefs(state)
 .data .header {
   font-weight: 600;
   color: rgb(36, 35, 35);
-
 }
 
 .appointments {
-  background-color: pink;
+  /* background-color: pink; */
 }
 
 .card-two {
@@ -187,6 +196,7 @@ const { circleUrl } = toRefs(state)
 
 .no-resize {
   resize: vertical;
+  background-color: red;
 }
 
 .notes {
@@ -199,7 +209,7 @@ const { circleUrl } = toRefs(state)
 </style>
 
 <style>
-.el-input.no-resize textarea {
+textarea {
   resize: none !important;
 }
 </style>
