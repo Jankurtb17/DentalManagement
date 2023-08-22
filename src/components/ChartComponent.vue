@@ -13,13 +13,15 @@ import {
   TooltipComponent,
   LegendComponent,
   GridComponent,
-  GridSimpleComponent
+  GridSimpleComponent,
 } from 'echarts/components'
 import VChart, { THEME_KEY } from 'vue-echarts'
-import { ref, provide } from 'vue'
+import { ref, provide, onMounted, reactive } from 'vue'
 const props = defineProps<{
   options: Chart,
 }>()
+
+let options = reactive({} as Chart)
 
 type Chart = {
   tooltip: any,
@@ -50,10 +52,17 @@ use([
   TitleComponent,
   TooltipComponent,
   LegendComponent,
-  GridComponent
+  GridComponent,
+  LegendComponent
 ])
 
 provide(THEME_KEY, 'dark')
+
+onMounted(() => {
+  setInterval(() => {
+    Object.assign(options, props.options)
+  }, 3000)
+})
 </script>
 
 <style scoped>

@@ -21,7 +21,7 @@
         <el-form-item prop="name">
           <el-input v-model="form.name" placeholder="Add title"></el-input>
         </el-form-item>
-        <el-form-item>
+          <el-form-item>
           <el-button type="primary" @click="saveAppointment">Save</el-button>
         </el-form-item>
       </el-form>

@@ -57,7 +57,7 @@ import {
   ElBreadcrumb,
   ElBreadcrumbItem,
   ElPopover,
-  ElImage
+  ElImage,
 } from "element-plus";
 
 import {
@@ -91,7 +91,10 @@ import {
   CreditCard,
   Setting,
   Printer,
-  More
+  More,
+  Top,
+  Wallet,
+  Money
 } from "@element-plus/icons-vue";
 
 export default (app: App): void => {
@@ -184,4 +187,7 @@ export default (app: App): void => {
     .component("Setting", Setting)
     .component("Printer", Printer)
     .component("More", More)
+    .component("Top", Top)
+    .component("Wallet", Wallet)
+    .component("Money", Money)
 }
