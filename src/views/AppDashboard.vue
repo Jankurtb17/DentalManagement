@@ -12,7 +12,7 @@
           <div class="left-card-patients">
             <el-row :gutter="20">
               <el-col>
-                <CardComponent>
+                <CardComponent :hasHeaderTitle="true">
                   <template #header> Patients </template>
                   <template #body>
                     <div class="patients">
@@ -43,7 +43,7 @@
             </el-row>
             <el-row>
               <el-col>
-                <CardComponent>
+                <CardComponent :hasHeaderTitle="true">
                   <template #header> Top Treatment </template>
                   <template #body>
                     <div class="text-body">
@@ -62,7 +62,7 @@
           <!-- Upcoming Request Card -->
           <el-row>
             <el-col>
-              <CardComponent>
+              <CardComponent :hasHeaderTitle="true">
                 <template #header> Upcoming Appointment </template>
                 <template #body>
                   <h5 class="count">51</h5>
@@ -82,7 +82,7 @@
           <!-- Approval request card -->
           <el-row>
             <el-col>
-              <CardComponent>
+              <CardComponent :hasHeaderTitle="true">
                 <template #header> Approval Appointment </template>
                 <template #body>
                   <h5 class="count">51</h5>
@@ -102,7 +102,7 @@
           <!-- Today's Appointment card -->
           <el-row>
             <el-col>
-              <CardComponent>
+              <CardComponent :hasHeaderTitle="true">
                 <template #header> Today's Appointment </template>
                 <template #body>
                   <el-scrollbar height="20vh">

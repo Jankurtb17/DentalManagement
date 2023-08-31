@@ -10,7 +10,7 @@ import { auth } from './firebase/firebase';
 
 const app = createApp(App)
 app.config.globalProperties.$auth = auth;
+app.use(elementPlus)
 app.use(createPinia())
 app.use(router)
-app.use(elementPlus)
 app.mount('#app')

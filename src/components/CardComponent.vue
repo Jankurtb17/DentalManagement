@@ -1,6 +1,6 @@
 <template>
-  <el-card class="cards">
-    <template #header>
+  <el-card class="cards" :class="{'full-height': !props.hasHeaderTitle}">
+    <template #header v-if="props.hasHeaderTitle">
       <slot name="header">
 
       </slot>
@@ -11,8 +11,21 @@
   </el-card>
 </template>
 
+<script lang="ts" setup>
+const props = defineProps({
+  hasHeaderTitle: {
+    type: Boolean,
+    required: true
+  }
+})
+</script>
+
 <style scoped>
 .cards {
   height: 95%;
+}
+
+.full-height {
+  height: 100%;
 }
 </style>
