@@ -18,7 +18,7 @@ import {
 import VChart, { THEME_KEY } from 'vue-echarts'
 import { ref, provide, onMounted, reactive } from 'vue'
 const props = defineProps<{
-  options: Chart,
+  options: any,
 }>()
 
 let options = reactive({} as Chart)

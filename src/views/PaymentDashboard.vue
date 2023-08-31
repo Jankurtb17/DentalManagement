@@ -73,19 +73,26 @@
         <div class="row-two">
           <CardComponent :hasHeaderTitle="false">
             <template #body>
-          <div class="barChart">
-            <v-chart class="chart" :option="barOptions" autoresize />
+          <div class="pieChart">
+            <label class="text-gray">Mode of payment</label>
+            <PieChartVue />
           </div>
             </template>
           </CardComponent>
           <CardComponent :hasHeaderTitle="false">
             <template #body>
+              <label class="text-gray">Monthly Revenue</label>
+              <LineChart />
             </template>
           </CardComponent>
         </div>
         <div class="row-three">
           <CardComponent :hasHeaderTitle="false">
             <template #body>
+              <label class="text-gray">Transactions</label>
+              <el-scrollbar height="30vh"> 
+                <AppTable />
+              </el-scrollbar>
             </template>
           </CardComponent>
         </div>
@@ -95,6 +102,8 @@
 </template>
 
 <script lang="ts" setup>
+import PieChartVue from '@/components/PieChart/PieChart.vue'
+import LineChart from "@/components/LineChart/LineChart.vue"
 import BaseLayout from '@/base/BaseLayout.vue'
 import CardComponent from "@/components/CardComponent.vue"
 import ChartComponent from '@/components/ChartComponent.vue'
@@ -238,8 +247,10 @@ onMounted(() => {
   height: 100%;
 }
 
-.barChart {
+.pieChart label{
   /* height: 98vh; */
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .row-three {

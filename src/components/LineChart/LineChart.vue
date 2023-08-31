@@ -1,19 +1,19 @@
 <template>
   <div>
-    <v-chart class="chart"  style="height: 300px; width: 100%;"  :option="option" autoresize />
+    <v-chart class="chart"  style="height: 330px; width: 100%;"  :option="option" autoresize />
   </div>
 </template>
 
 <script lang="ts" setup >
 import { use } from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
-import { PieChart, BarChart,  } from 'echarts/charts'
+import { PieChart, BarChart, LineChart,  } from 'echarts/charts'
 import {
   TitleComponent,
   TooltipComponent,
   LegendComponent,
   GridComponent,
-  ToolboxComponent
+  ToolboxComponent,
 } from 'echarts/components'
 import VChart, { THEME_KEY } from 'vue-echarts'
 import { ref, provide, onMounted, reactive } from 'vue'
@@ -21,7 +21,7 @@ import * as chart from 'echarts'
 type EchartsOption = chart.EChartsOption
 const echarts = ref()
 use([
-  PieChart,
+  LineChart,
   ToolboxComponent,
   TitleComponent,
   TooltipComponent,
@@ -33,33 +33,17 @@ use([
 provide(THEME_KEY, 'light')
 
 const option = {
-  legend: {
-    top: 'bottom'
+  xAxis: {
+    type: 'category',
+    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
   },
-  toolbox: {
-    show: true,
-    feature: {
-      mark: { show: true },
-      dataView: { show: true, readOnly: false },
-      restore: { show: true },
-      saveAsImage: { show: true }
-    }
+  yAxis: {
+    type: 'value'
   },
   series: [
     {
-      name: 'Nightingale Chart',
-      type: 'pie',
-      radius: [25, 100],
-      center: ['50%', '50%'],
-      roseType: 'area',
-      itemStyle: {
-        borderRadius: 8
-      },
-      data: [
-        { value: 40, name: 'Gcash' },
-        { value: 38, name: 'Maya' },
-        { value: 32, name: 'Debit/Credit Card' },
-      ]
+      data: [150, 230, 224, 218, 135, 147, 260],
+      type: 'line'
     }
   ]
 } as EchartsOption;
