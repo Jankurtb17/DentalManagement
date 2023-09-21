@@ -30,15 +30,45 @@
     </template>
     <template #body>
       <AppTable />
+      <AppModal v-model="deleteUser">
+        <template #body>
+          Delete User
+        </template>
+      </AppModal>
     </template>
   </BaseLayout>
 </template>
 
 <script lang="ts" setup>
-import BaseLayout from '@/base/BaseLayout.vue'
-import AppTable from '@/components/AppTable.vue'
-import { Printer, Filter } from '@element-plus/icons-vue'
-import BreadCrumb from "@/components/BreadCrumb.vue"
+  import AppModal from '@/components/AppModal.vue'
+  import BaseLayout from '@/base/BaseLayout.vue'
+  import AppTable from '@/components/AppTable.vue'
+  import { Printer, Filter } from '@element-plus/icons-vue'
+  import BreadCrumb from "@/components/BreadCrumb.vue"
+  import UserServices from "@/composables/Users"
+  import useClient from '@/composables/Clients'
+  import { ref, reactive, onMounted } from "vue"
+  const { getAllClients } = useClient()
+  const users = ref([])
+  const deleteUser = ref(false)
+
+  const getData = async () => {
+    try {
+      const data = await getAllClients()
+      users.value = data
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  onMounted(() => {
+    getData()
+  })
+
+
+
+
+
 </script>
 
 <style scoped>
