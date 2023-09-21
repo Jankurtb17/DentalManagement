@@ -61,9 +61,10 @@ import { useRouter } from 'vue-router'
 import { ElNotification } from 'element-plus'
 import type { FormRules, FormInstance } from 'element-plus'
 import { formRules } from '@/utils/FormRules'
+import useUser from "@/composables/Users"
 const router = useRouter()
-const { googleLogin, register } = userLogin()
-
+const { googleLogin } = userLogin()
+const { register } = useUser()
 const form = reactive({
   email: '',
   password: ''
@@ -120,9 +121,9 @@ const rules = reactive<FormRules>({
   ]
 })
 
-const signUp = async (formEl: FormInstance | undefined) => {
+const signUp = async () => {
   try {
-    await register(form.email, form.password).then(() => {
+    await register(form).then(() => {
       router.push('/dashboard')
     })
   } catch (error) {

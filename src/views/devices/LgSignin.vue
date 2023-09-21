@@ -59,8 +59,10 @@ import userLogin from '@/stores/login'
 import type { FormItem } from '@/utils/Types'
 import { useRouter } from 'vue-router'
 import { ElNotification } from 'element-plus'
+import useUser from "@/composables/Users"
 const router = useRouter()
-const { googleLogin, loginUser } = userLogin()
+const { login } = useUser()
+const { googleLogin } = userLogin()
 const form = reactive({
   email: '',
   password: ''
@@ -68,7 +70,7 @@ const form = reactive({
 
 const signinUser = async () => {
   try {
-    await loginUser(form.email, form.password).then(() => {
+    await login(form).then(() => {
       router.push('/dashboard')
     })
   } catch (error) {
