@@ -20,8 +20,8 @@ class ClientService {
     return http.get<ClientInformation>('/clients', {
       headers: {
         Authorization: `Bearer ${token}`,
-        withCredentials: true
-      }
+      },
+      withCredentials: true
     })
   } 
 
@@ -29,8 +29,8 @@ class ClientService {
     return http.get<ClientInformation>(`/clients/${clientId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
-        withCredentials: true
-      }
+      },
+      withCredentials: true
     })
   }
 
