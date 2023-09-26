@@ -16,7 +16,12 @@ export interface ClientInformation {
 
 class ClientService {
   getAllClient = (): Promise<any> => {
-    return http.get<ClientInformation>('/clients')
+    const token = JSON.parse(localStorage.getItem('token') as string);
+    return http.get<ClientInformation>('/clients', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
   } 
 
   getClient = (clientId: string): Promise<any> => {
