@@ -1,4 +1,5 @@
 import http from '@/main-http'
+const token = JSON.parse(localStorage.getItem('token') as string);
 
 export interface ClientInformation {
   first_name: String
@@ -16,16 +17,21 @@ export interface ClientInformation {
 
 class ClientService {
   getAllClient = (): Promise<any> => {
-    const token = JSON.parse(localStorage.getItem('token') as string);
     return http.get<ClientInformation>('/clients', {
       headers: {
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
+        withCredentials: true
       }
     })
   } 
 
   getClient = (clientId: string): Promise<any> => {
-    return http.get<ClientInformation>(`/clients/${clientId}`)
+    return http.get<ClientInformation>(`/clients/${clientId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        withCredentials: true
+      }
+    })
   }
 
   createClient = (client: ClientInformation): Promise<any> => {
