@@ -2,10 +2,10 @@ import ClientService from "@/services/client"
 import type { ClientInformation } from "@/services/client"
 import { reactive } from "vue"
 
-interface Status {
-  isLoading: Boolean
-  code: Number
-  message: String
+export interface Status {
+  isLoading: boolean
+  code: number
+  message: string
 }
 
 export const useClient = () => {
@@ -29,8 +29,23 @@ export const useClient = () => {
     return client
   }
 
+  const getClient = async (id: string) => {
+    status.isLoading = true
+    const client = await clientApi
+      .getClient(id)
+      .then((response) => response.data)
+      .catch((error) => {
+        status.message = error
+        throw error
+      })
+      .finally(() => status.isLoading = false)
+    return client
+  }
+
   return {
-    getAllClients
+    status,
+    getAllClients,
+    getClient
   }
   
 }

@@ -4,12 +4,12 @@
       <el-icon color="#445ec1" :size="50"><Calendar /></el-icon>
       <span>Patient Information</span>
     </template>
-    <template #header-two>
+    <template #extra>
       <BreadCrumb>
         <template #content>
           <el-breadcrumb-item :to="{ path: '/dashboard' }">Overview</el-breadcrumb-item>
           <el-breadcrumb-item :to="{ path: '/patient-list' }">Patient List</el-breadcrumb-item>
-          <el-breadcrumb-item>{{ $route.params.patient_id }}</el-breadcrumb-item>
+          <el-breadcrumb-item>{{ props.patient_id }}</el-breadcrumb-item>
         </template>
         <template #extra>
           <div class="flex items-center">
@@ -27,8 +27,11 @@
                 <el-avatar :size="150" :src="url" />
               </div>
               <div class="patient-name">
-                <h1>Jan Kurt D. Bayaras</h1>
-                <span>j.kurtbayaras@gmail.com</span>
+                <el-skeleton :rows="2" animated v-if="status.isLoading"/>
+                <div v-else>
+                  <h1>{{ data.first_name }}</h1>
+                  <span>{{ data.email }}</span>
+                </div>
               </div>
             </el-card>
             <el-card>
@@ -40,26 +43,26 @@
                   </div>
                   <div class="data">
                     <span class="header">Date of Birth</span>
-                    <span>Dec 30, 1997</span>
+                    <span>{{ data.date_of_birth }}</span>
                   </div>
                   <div class="data">
                     <span class="header">Phone Number </span>
-                    <span>09565011210</span>
+                    <span>{{ data.phone_number }}</span>
                   </div>
                 </div>
 
                 <div class="patient-data">
                   <div class="data">
                     <span class="header">Street Address</span>
-                    <span>9391 Felipe</span>
+                    <span>{{data.street}}</span>
                   </div>
                   <div class="data">
                     <span class="header">Barangay</span>
-                    <span>Guadalupe Nuevo</span>
+                    <span>{{ data.brgy }}</span>
                   </div>
                   <div class="data">
                     <span class="header">City </span>
-                    <span>Makati</span>
+                    <span>{{ data.city }}</span>
                   </div>
                 </div>
 
@@ -70,7 +73,7 @@
                   </div>
                   <div class="data">
                     <span class="header">Zip code</span>
-                    <span>1212</span>
+                    <span>{{ data.zip_code }}</span>
                   </div>
                 </div>
               </div>
@@ -111,10 +114,37 @@
 import BaseLayout from '@/base/BaseLayout.vue'
 import BreadCrumb from '@/components/BreadCrumb.vue'
 import { Printer, Filter } from '@element-plus/icons-vue'
-import { ref, reactive, toRefs } from 'vue'
+import useClient from "@/composables/Clients"
+import { ref, reactive, toRefs, onMounted, type PropType } from 'vue'
+import type { ClientInformation } from "@/services/client"
+import type { Status } from "@/composables/Clients"
+import { useRouter, useRoute } from "vue-router"
+const route = useRoute()
+const data = reactive({} as ClientInformation)
+const { getClient } = useClient()
 const state = reactive({
   circleUrl: '../assets/img/administrator.jpg'
 })
+const status = reactive({} as Status)
+
+const props = defineProps({
+  patient_id: {
+    type: String,
+    required: true
+  },
+})
+
+
+const getData = async () => {
+  const user = await getClient(props.patient_id)
+  Object.assign(data, user)
+  console.log(data)
+}
+
+onMounted(() => {
+  getData()
+})
+
 
 const url = 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg'
 const notes = ref('')
