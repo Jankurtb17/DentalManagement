@@ -2,13 +2,15 @@
   <el-dialog
     v-bind="$attrs"
     :title="props.title"
-    width="30%"
+    width="50%"
     :destroy-on-close="true"
     >
     <slot name="body">
       
     </slot>
-    
+    <template #footer>
+      <slot name="footer"></slot>
+    </template>
   </el-dialog>
 </template>
 
