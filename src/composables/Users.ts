@@ -14,11 +14,11 @@ export const useUser = () => {
   const status = reactive({} as Status)
   // register user
   const register = async (user: User) => {
-    status.isLoading = true
+    status.isLoading = true 
     const registerUser = await userService
       .registerUser(user)
       .then((response) => {
-        console.log(response.data)
+        console.log(response.headers.cookie)
         sessionStorage.setItem('creds', JSON.stringify(response.data))
       })
       .catch((error) => {
@@ -35,7 +35,7 @@ export const useUser = () => {
     const registerUser = await userService
       .loginUser(user)
       .then((response) => {
-        console.log(response)
+        console.log(response.headers.cookie)
         localStorage.setItem('token', JSON.stringify(response.data.authentication.sessionToken))
         sessionStorage.setItem('creds', JSON.stringify(response.data))
       })
