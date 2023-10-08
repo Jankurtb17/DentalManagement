@@ -1,23 +1,26 @@
 import http from '@/main-http'
 
 export interface ClientInformation {
-  first_name: String
-  last_name: String
-  middle_name?: String
-  email: String
-  date_of_birth: String
-  phone_number: String
+  first_name: string
+  last_name: string
+  middle_name?: string
+  email: string
+  sex: string
+  date_of_birth: string
+  phone_number: string
+  lot_number: string
   street: string
   brgy: string
   city: string
   province: string
   zip_code: string
+  country: string;
 }
 
 class ClientService {
   getAllClient = (): Promise<any> => {
     const token = JSON.parse(localStorage.getItem('token') as string);
-    return http.get<ClientInformation>('/clients', {
+    return http.get('/clients', {
       headers: {
         'Authorization': `Bearer ${token}`
       }
