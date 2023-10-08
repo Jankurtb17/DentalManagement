@@ -1,29 +1,30 @@
 <template>
   <el-table
     ref="multipleTableRef"
-    :data="tableData"
+    :data="props.data"
     style="width: 100%"
     table-layout="fixed"
+    v-loading="props.isLoading"
     @row-click="handleRowClick"
     @selection-change="handleSelectionChange"
   >
-    <el-table-column type="selection"  width="55" >
-      <!-- <template #default="scope">
-        {{ scope.row }}
-      </template> -->
+    <el-table-column type="selection" width="55">
+  
     </el-table-column>
-    <el-table-column property="name" label="Name" />
-    <el-table-column property="phoneNumber" label="Phone Number" />
+    <el-table-column property="first_name" label="First Name" />
+    <el-table-column property="middle_name" label="Middle Name" />
+    <el-table-column property="last_name" label="Last Name" />
+    <el-table-column property="phone_number" label="Phone Number" />
+    <el-table-column property="email" label="Email" />
     <el-table-column label="Last Appointment">
       <template #default="scope">{{ scope.row.date }}</template>
     </el-table-column>
-    <el-table-column property="address" label="Address" show-overflow-tooltip />
     <el-table-column property="Operation" label="Operation">
       <template #default="scope">
         <el-popover placement="bottom" :width="150" trigger="click">
           <div class="list">
-            <div class="list-view content" @click="showPatientInfo(scope.row.id)">
-              <el-icon ><View /></el-icon> View Patients
+            <div class="list-view content" @click="showPatientInfo(scope.row._id)">
+              <el-icon><View /></el-icon> View Patients
             </div>
             <div class="list-edit content">
               <el-icon><Edit /></el-icon> Edit Patients
@@ -46,76 +47,42 @@
 <script lang="ts" setup>
 import { ref, unref } from 'vue'
 import { ElTable } from 'element-plus'
-import { useRouter } from "vue-router"
+import { useRouter } from 'vue-router'
 
 interface User {
-  id: number,
-  date: string
-  name: string
-  phoneNumber: string
-  address: string
+  _id: string
+  brgy: string
+  city: string
+  date_of_birth: string
+  email: string
+  first_name: string
+  last_name: string
+  middle_name: string
+  phone_number: string
+  province: string
+  street: string
+  zip_code: number
 }
+
+const props = defineProps({
+  data: {
+    type: Array<User>,
+    required: true
+  },
+  isLoading: {
+    type: Boolean,
+    required: true
+  }
+})
+
 const router = useRouter()
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
-const multipleSelection = ref<User[]>([])
-
-const tableData: User[] = [
-  {
-    id: 1,
-    name: 'Tom',
-    phoneNumber: '09982797228',
-    date: '2016-05-03',
-    address: 'No. 189, Grove St, Los Angeles'
-  },
-  {
-    id: 2,
-    name: 'Tom',
-    phoneNumber: '09982797228',
-    date: '2016-05-02',
-    address: 'No. 189, Grove St, Los Angeles'
-  },
-  {
-    id: 3,
-    name: 'Tom',
-    phoneNumber: '09982797228',
-    date: '2016-05-04',
-    address: 'No. 189, Grove St, Los Angeles'
-  },
-  {
-    id: 4,
-    name: 'Tom',
-    phoneNumber: '09982797228',
-    date: '2016-05-01',
-    address: 'No. 189, Grove St, Los Angeles'
-  },
-  {
-    id: 5,
-    name: 'Tom',
-    phoneNumber: '09982797228',
-    date: '2016-05-08',
-    address: 'No. 189, Grove St, Los Angeles'
-  },
-  {
-    id: 6,
-    name: 'Tom',
-    date: '2016-05-06',
-    phoneNumber: '09982797228',
-    address: 'No. 189, Grove St, Los Angeles'
-  },
-  {
-    id: 7,
-    name: 'Tom',
-    phoneNumber: '09982797228',
-    date: '2016-05-07',
-    address: 'No. 189, Grove St, Los Angeles'
-  }
-]
+const multipleSelection = ref(props.data)
 
 const handleRowClick = (row: User) => {
   // Update selectedRows array based on row clicks
   if (isSelected(row)) {
-    multipleSelection.value = multipleSelection.value.filter((r: any) => r.id !== row.id)
-    
+    multipleSelection.value = multipleSelection.value.filter((r: any) => r.id !== row._id)
   } else {
     multipleSelection.value.push(row)
   }
@@ -124,7 +91,7 @@ const handleRowClick = (row: User) => {
 }
 
 const isSelected = (row: User) => {
-  return multipleSelection.value.some((r: User) => r.id === row.id)
+  return multipleSelection.value.some((r: User) => r._id === row._id)
 }
 
 const handleSelectionChange = (val: User[]) => {
@@ -137,9 +104,7 @@ const showPatientInfo = (id: string) => {
     params: {
       patient_id: id
     }
-  
   })
-  console.log("click")
 }
 </script>
 
