@@ -24,10 +24,25 @@
           <div class="info">
             <el-card>
               <div class="patient-img">
-                <el-avatar :size="150" :src="url" />
+                <el-skeleton
+                  class="img-skeleton"
+                  style="--el-skeleton-circle-size: 150px"
+                  v-if="status.isLoading"
+                  :loading="status.isLoading"
+                >
+                  <template #template>
+                    <el-skeleton-item variant="circle" />
+                  </template>
+                </el-skeleton>
+                <el-avatar :size="150" :src="url" v-else />
               </div>
               <div class="patient-name">
-                <el-skeleton :rows="2" animated v-if="status.isLoading"/>
+                <el-skeleton
+                  :rows="1"
+                  animated
+                  v-if="status.isLoading"
+                  :loading="status.isLoading"
+                />
                 <div v-else>
                   <h1>{{ data.first_name }}</h1>
                   <span>{{ data.email }}</span>
@@ -36,46 +51,89 @@
             </el-card>
             <el-card>
               <div class="patient-info">
-                <div class="patient-data">
-                  <div class="data">
-                    <span class="header">Gender</span>
-                    <span>Male</span>
-                  </div>
-                  <div class="data">
-                    <span class="header">Date of Birth</span>
-                    <span>{{ data.date_of_birth }}</span>
-                  </div>
-                  <div class="data">
-                    <span class="header">Phone Number </span>
-                    <span>{{ data.phone_number }}</span>
-                  </div>
-                </div>
-
-                <div class="patient-data">
-                  <div class="data">
-                    <span class="header">Street Address</span>
-                    <span>{{data.street}}</span>
-                  </div>
-                  <div class="data">
-                    <span class="header">Barangay</span>
-                    <span>{{ data.brgy }}</span>
-                  </div>
-                  <div class="data">
-                    <span class="header">City </span>
-                    <span>{{ data.city }}</span>
-                  </div>
-                </div>
-
-                <div class="patient-data">
-                  <div class="data">
-                    <span class="header">Country</span>
-                    <span>Philippines</span>
-                  </div>
-                  <div class="data">
-                    <span class="header">Zip code</span>
-                    <span>{{ data.zip_code }}</span>
-                  </div>
-                </div>
+                 <!-- Data row 1 -->
+                <el-skeleton animated :loading="false">
+                  <template #template>
+                    <div class="patient-data-r1">
+                      <el-skeleton-item variant="text" />
+                      <el-skeleton-item variant="text" />
+                      <el-skeleton-item variant="text" />
+                      <el-skeleton-item variant="text" />
+                      <el-skeleton-item variant="text" />
+                      <el-skeleton-item variant="text" />
+                    </div>
+                  </template>
+                  <template #default>
+                    <div class="patient-data">
+                      <div class="data">
+                        <span class="header">Gender</span>
+                        <span>Male</span>
+                      </div>
+                      <div class="data">
+                        <span class="header">Date of Birth</span>
+                        <span>{{ data.date_of_birth }}</span>
+                      </div>
+                      <div class="data">
+                        <span class="header">Phone Number </span>
+                        <span>{{ data.phone_number }}</span>
+                      </div>
+                    </div>
+                  </template>
+                </el-skeleton>
+                 <!-- Data row 2 -->
+                <el-skeleton animated :loading="false">
+                  <template #template>
+                    <div class="patient-data-r1">
+                      <el-skeleton-item variant="text" />
+                      <el-skeleton-item variant="text" />
+                      <el-skeleton-item variant="text" />
+                      <el-skeleton-item variant="text" />
+                      <el-skeleton-item variant="text" />
+                      <el-skeleton-item variant="text" />
+                    </div>
+                  </template>
+                  <template #default>
+                    <div class="patient-data">
+                      <div class="data">
+                        <span class="header">Street Address</span>
+                        <span>{{ data.street }}</span>
+                      </div>
+                      <div class="data">
+                        <span class="header">Barangay</span>
+                        <span>{{ data.brgy }}</span>
+                      </div>
+                      <div class="data">
+                        <span class="header">City </span>
+                        <span>{{ data.city }}</span>
+                      </div>
+                    </div>
+                  </template>
+                </el-skeleton>
+                <!-- Data row 3 -->
+                <el-skeleton animated :loading="false">
+                  <template #template>
+                    <div class="patient-data-r1">
+                      <el-skeleton-item variant="text" />
+                      <el-skeleton-item variant="text" />
+                      <el-skeleton-item variant="text" />
+                      <el-skeleton-item variant="text" />
+                      <el-skeleton-item variant="text" />
+                      <el-skeleton-item variant="text" />
+                    </div>
+                  </template>
+                  <template #default>
+                    <div class="patient-data">
+                      <div class="data">
+                        <span class="header">Country</span>
+                        <span>Philippines</span>
+                      </div>
+                      <div class="data">
+                        <span class="header">Zip code</span>
+                        <span>{{ data.zip_code }}</span>
+                      </div>
+                    </div>
+                  </template>
+                </el-skeleton>
               </div>
             </el-card>
           </div>
@@ -100,10 +158,7 @@
               </el-form>
             </div>
           </el-card>
-
-          <el-card>
-            
-          </el-card>
+          <el-card> </el-card>
         </div>
       </div>
     </template>
@@ -114,11 +169,11 @@
 import BaseLayout from '@/base/BaseLayout.vue'
 import BreadCrumb from '@/components/BreadCrumb.vue'
 import { Printer, Filter } from '@element-plus/icons-vue'
-import useClient from "@/composables/Clients"
+import useClient from '@/composables/Clients'
 import { ref, reactive, toRefs, onMounted, type PropType } from 'vue'
-import type { ClientInformation } from "@/services/client"
-import type { Status } from "@/composables/Clients"
-import { useRouter, useRoute } from "vue-router"
+import type { ClientInformation } from '@/services/client'
+import type { Status } from '@/composables/Clients'
+import { useRouter, useRoute } from 'vue-router'
 const route = useRoute()
 const data = reactive({} as ClientInformation)
 const { getClient } = useClient()
@@ -131,9 +186,8 @@ const props = defineProps({
   patient_id: {
     type: String,
     required: true
-  },
+  }
 })
-
 
 const getData = async () => {
   const user = await getClient(props.patient_id)
@@ -144,7 +198,6 @@ const getData = async () => {
 onMounted(() => {
   getData()
 })
-
 
 const url = 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg'
 const notes = ref('')
@@ -169,7 +222,6 @@ const { circleUrl } = toRefs(state)
   padding-top: 20px;
   display: grid;
   grid-template-rows: 1fr 1fr 1fr;
-  /* height: 100%; */
   gap: 50px;
 }
 
@@ -187,6 +239,12 @@ const { circleUrl } = toRefs(state)
   padding: 20px 0;
 }
 
+.img-skeleton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .patient-name {
   text-align: center;
 }
@@ -202,6 +260,13 @@ const { circleUrl } = toRefs(state)
   height: 100%;
   grid-template-columns: 1fr 1fr 1fr;
   font-family: 'Roboto', sans-serif;
+}
+
+.patient-data-r1 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  font-family: 'Roboto', sans-serif;
+  gap: 15px;
 }
 
 .data {
