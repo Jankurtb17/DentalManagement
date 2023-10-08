@@ -41,11 +41,24 @@ export const useClient = () => {
       .finally(() => status.isLoading = false)
     return client
   }
+  
+  const createClient = async (values: ClientInformation) => {
+    status.isLoading = true
+    const client = await clientApi
+      .createClient(values)
+      .then((response) => response.data) 
+      .catch((e) => {
+        throw e
+      })
+      .finally(() => status.isLoading = false)
+    return client
+  }
 
   return {
     status,
     getAllClients,
-    getClient
+    getClient,
+    createClient
   }
   
 }
