@@ -58,6 +58,8 @@ import {
   ElBreadcrumbItem,
   ElPopover,
   ElImage,
+  ElSteps,
+  ElStep
 } from "element-plus";
 
 import {
@@ -156,6 +158,8 @@ export default (app: App): void => {
     .use(ElBreadcrumbItem)
     .use(ElPopover)
     .use(ElImage)
+    .use(ElSteps)
+    .use(ElStep)
     .component("el-icon-zoomin", ZoomIn)
     .component("Edit", Edit)
     .component("Delete", Delete)
