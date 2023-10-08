@@ -100,7 +100,8 @@ const router = createRouter({
       components: {
         SideMenu: () => import("../components/SideMenu.vue"),
         MainContent: () => import("../components/PatientInfo.vue")
-      }
+      },
+      props: true
     },
     {
       path: '/payment',
