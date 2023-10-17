@@ -10,9 +10,10 @@ export interface ClientInformation {
   phone_number: string
   lot_number: string
   street: string
-  brgy: string
+  region: string
+  province: string | null
   city: string
-  province: string
+  brgy: string
   zip_code: string
   country: string;
 }
