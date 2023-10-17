@@ -44,7 +44,7 @@
             <el-step title="Address" :icon="LocationFilled" />
             <el-step title="Upload " :icon="UploadFilled" />
           </el-steps>
-          <el-form>
+          <el-form :model="form" ref="formRuleRef">
             <transition name="slide">
               <div class="personal" v-show="showInfo">
                 <div class="form-name">
@@ -103,19 +103,17 @@
                     <el-input v-model="form.street" />
                   </el-form-item>
                   <el-form-item>
-                    <span>City/Municipality</span>
+                    <span>Region</span>
                     <el-select
-                      filterable
-                      remote
-                      :remote-method="findCity"
-                      v-model="form.city"
+                      @change="handleRegionChange"
+                      v-model="form.region"
                       style="width: 100%"
                     >
                       <el-option
-                        v-for="city in cities"
-                        :key="city"
-                        :value="city.name"
-                        :label="city.name"
+                        v-for="region in regions"
+                        :key="region.psgcId"
+                        :value="region.regionId"
+                        :label="region.name"
                       >
                       </el-option>
                     </el-select>
@@ -124,19 +122,43 @@
 
                 <div class="form-name">
                   <el-form-item>
-                    <span>Barangay</span>
+                    <span>Province</span>
                     <el-select
-                      filterable
-                      remote
-                      :remote-method="getBrgy"
-                      v-model="form.brgy"
+                      @change="handleChangeProvince"
+                      v-model="form.province"
                       style="width: 100%"
                     >
                       <el-option
-                        v-for="barangay in brgy"
-                        :key="barangay"
-                        :value="barangay.name"
-                        :label="barangay.name"
+                        v-for="province in allProvinces"
+                        :key="province.psgcId"
+                        :value="province.provinceId"
+                        :label="province.name"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+
+                  <el-form-item>
+                    <span>City/Municipalities</span>
+                    <el-select @change="handleChangeCity" v-model="form.city" style="width: 100%">
+                      <el-option
+                        v-for="city in allCities"
+                        :key="city.psgcId"
+                        :value="city.municipalityId"
+                        :label="city.name"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+
+                  <el-form-item>
+                    <span>City/Municipalities</span>
+                    <el-select v-model="form.brgy" style="width: 100%">
+                      <el-option
+                        v-for="brgy in allBarangays"
+                        :key="brgy"
+                        :value="brgy.name"
+                        :label="brgy.name"
                       >
                       </el-option>
                     </el-select>
@@ -155,9 +177,10 @@
         <template #footer>
           <div class="next-btn">
             <el-button round @click="prev" :disabled="disablePrev">Previous</el-button>
-            <el-button :icon="Right" type="primary" round @click="next">{{
-              active === 2 ? 'finish' : 'next'
-            }}</el-button>
+            <el-button :icon="Right" type="primary" round @click="next" v-if="active !== 2"
+              >Next</el-button
+            >
+            <el-button type="primary" round @click="createClients" v-else>Create User</el-button>
           </div>
         </template>
       </AppModal>
@@ -184,13 +207,21 @@ import BreadCrumb from '@/components/BreadCrumb.vue'
 import useClient from '@/composables/Clients'
 import { ref, reactive, onMounted, watch, computed } from 'vue'
 import type { ClientInformation } from '@/services/client'
-import phil from 'phil-reg-prov-mun-brgy'
+// import { regions, baranggays } from 'ph-geo-admin-divisions'
+import type { FormInstance, FormRules } from 'element-plus'
+import { barangays } from '@/utils/barangays'
+import { provinces } from '@/utils/provinces'
+import { municipalities } from '@/utils/municipalities'
+import { regions } from '@/utils/regions'
 const loading = ref(false)
 const form = reactive({} as ClientInformation)
-const { getAllClients, status } = useClient()
+const { getAllClients, status, createClient } = useClient()
 const users = ref([])
-const cities = ref([] as City[])
-const brgy = ref([])
+const allCities = ref([] as Provinces[])
+const allBarangays = ref([] as Provinces[])
+const allProvinces = ref([] as Provinces[])
+const allRegions = ref([] as Provinces[])
+// const region = ref([])
 const deleteUser = ref(false)
 const createVisible = ref(false)
 const active = ref(0)
@@ -198,11 +229,25 @@ const showInfo = ref(true)
 const showAddress = ref(false)
 const verifyInfo = ref(false)
 const disablePrev = ref(true)
-const cityMunCode = ref<string>('')
+const formRuleRef = ref<FormInstance>()
+const regionCode = ref('' as string)
+const provinceCode = ref('' as string)
+const cityMunCode = ref('' as string)
+let formStatus = ref('')
 type City = {
   name: string
   mun_code: string
   prov_code: string
+}
+
+type Provinces = {
+  psgcId: string
+  name: string
+  geoLevel: string
+  regionId: string
+  provinceId: string
+  municipalityId: string
+  baranggayId: string
 }
 
 const getData = async () => {
@@ -219,6 +264,12 @@ const next = () => {
   if (active.value > 0) {
     disablePrev.value = false
   }
+
+  if (active.value === 2) {
+    formStatus.value = 'finish'
+  } else {
+    formStatus.value = ''
+  }
 }
 
 const prev = () => {
@@ -228,38 +279,43 @@ const prev = () => {
   }
 }
 
-const findCity = (query: string) => {
-  if (query) {
-    loading.value = true
-    setTimeout(() => {
-      loading.value = false
-      cities.value = phil.city_mun.filter((item: City) => {
-        return item.name.toLowerCase().includes(query.toLowerCase())
-      })
-      cityMunCode.value = cities.value.map((item: City) => item.mun_code as string)
-    }, 200)
-  } else {  
-    cities.value = []
-  }
-}
-
-const getBrgy = (query: string) => {
-  if (query) {
-    loading.value = true
-    setTimeout(() => {
-      loading.value = false
-      brgy.value = findBrgy.value.filter((item: any) => {
-        return item.name.toLowerCase().includes(query.toLowerCase())
-      })
-    }, 200)
-  } else {
-    cities.value = []
-  }
-}
-
-const findBrgy = computed(() => {
-  return phil.getBarangayByMun(cityMunCode.value)
+const search = reactive({
+  name: '',
+  regionId: '',
+  provinceId: '',
+  municipalityId: '',
+  barangaysId: ''
 })
+
+const createClients = () => {
+  if (!formRuleRef.value) return
+  else if (formStatus.value !== 'finish') return
+  formRuleRef.value.validate(async (isValid) => {
+    if (isValid) {
+      await createClient(form)
+    }
+  })
+}
+
+const handleRegionChange = () => {
+  form.province = ''
+  form.city = ''
+  form.brgy = ''
+  allProvinces.value = provinces.filter((item: any) => item.regionId === form.region)
+}
+
+const handleChangeProvince = () => {
+  form.city = ''
+  form.brgy = ''
+  allCities.value = municipalities.filter((item: any) => item.provinceId === form.province)
+}
+
+const handleChangeCity = () => {
+  form.brgy = ''
+  allBarangays.value = barangays.filter(
+    (item: any) => item.provinceId === form.province && item.municipalityId === form.city
+  )
+}
 
 watch(active, (newVal) => {
   if (newVal === 0) {
@@ -285,7 +341,6 @@ watch(createVisible, (newVal) => {
 
 onMounted(() => {
   getData()
-  console.log(phil.provinces)
 })
 </script>
 
