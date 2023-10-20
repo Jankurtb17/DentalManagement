@@ -153,7 +153,9 @@
 
                   <el-form-item>
                     <span>City/Municipalities</span>
-                    <el-select v-model="form.brgy" style="width: 100%">
+                    <el-select 
+                      v-model="form.brgy" 
+                      style="width: 100%">
                       <el-option
                         v-for="brgy in allBarangays"
                         :key="brgy"
@@ -207,13 +209,12 @@ import BreadCrumb from '@/components/BreadCrumb.vue'
 import useClient from '@/composables/Clients'
 import { ref, reactive, onMounted, watch, computed } from 'vue'
 import type { ClientInformation } from '@/services/client'
-// import { regions, baranggays } from 'ph-geo-admin-divisions'
 import type { FormInstance, FormRules } from 'element-plus'
 import { barangays } from '@/utils/barangays'
 import { provinces } from '@/utils/provinces'
 import { municipalities } from '@/utils/municipalities'
 import { regions } from '@/utils/regions'
-const loading = ref(false)
+let loading = ref(false)
 const form = reactive({} as ClientInformation)
 const { getAllClients, status, createClient } = useClient()
 const users = ref([])
