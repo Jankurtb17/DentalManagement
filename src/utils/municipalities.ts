@@ -11066,7 +11066,7 @@ export const municipalities = [
     geoLevel: "Mun",
     regionId: "13",
     provinceId: "809",
-    municipalityId: "01",
+    municipalityId: "17",
     baranggayId: "000",
   },
   {
