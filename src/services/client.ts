@@ -33,6 +33,7 @@ class ClientService {
   }
 
   createClient = (client: ClientInformation): Promise<any> => {
+    console.log(client)
     return http.post<ClientInformation>('/clients', client)
   }
 

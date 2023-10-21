@@ -44,25 +44,25 @@
             <el-step title="Address" :icon="LocationFilled" />
             <el-step title="Upload " :icon="UploadFilled" />
           </el-steps>
-          <el-form :model="form" ref="formRuleRef">
+          <el-form :rules="rules" :model="form" ref="formRuleRef">
             <transition name="slide">
               <div class="personal" v-show="showInfo">
                 <div class="form-name">
-                  <el-form-item>
+                  <el-form-item prop="first_name">
                     <span>First Name</span>
                     <el-input v-model="form.first_name" />
                   </el-form-item>
-                  <el-form-item>
+                  <el-form-item prop="last_name">
                     <span>Last Name</span>
                     <el-input v-model="form.last_name" />
                   </el-form-item>
-                  <el-form-item>
+                  <el-form-item prop="middle_nmae">
                     <span>Middle Name</span>
                     <el-input v-model="form.middle_name" />
                   </el-form-item>
                 </div>
                 <div class="form-name">
-                  <el-form-item>
+                  <el-form-item prop="date_of_birth">
                     <span>Date of birth</span>
                     <el-date-picker
                       style="width: 100%"
@@ -71,17 +71,17 @@
                       v-model="form.date_of_birth"
                     />
                   </el-form-item>
-                  <el-form-item>
+                  <el-form-item prop="email">
                     <span>Email</span>
                     <el-input v-model="form.email" />
                   </el-form-item>
-                  <el-form-item>
+                  <el-form-item prop="phone_number">
                     <span>Phone Number</span>
                     <el-input v-model="form.phone_number" />
                   </el-form-item>
                 </div>
                 <div class="form-name">
-                  <el-form-item>
+                  <el-form-item prop="sex">
                     <span>Sex by birth</span>
                     <el-select v-model="form.sex" style="width: 100%">
                       <el-option value="Male">Male</el-option>
@@ -94,15 +94,15 @@
             <transition name="slide">
               <div class="address" v-show="showAddress">
                 <div class="form-name">
-                  <el-form-item>
+                  <el-form-item prop="lot_number">
                     <span>House/Lot Number</span>
                     <el-input v-model="form.lot_number" />
                   </el-form-item>
-                  <el-form-item>
+                  <el-form-item prop="street">
                     <span>Street</span>
                     <el-input v-model="form.street" />
                   </el-form-item>
-                  <el-form-item>
+                  <el-form-item prop="region">
                     <span>Region</span>
                     <el-select
                       @change="handleRegionChange"
@@ -121,7 +121,7 @@
                 </div>
 
                 <div class="form-name">
-                  <el-form-item>
+                  <el-form-item prop="province">
                     <span>Province</span>
                     <el-select
                       @change="handleChangeProvince"
@@ -138,7 +138,7 @@
                     </el-select>
                   </el-form-item>
 
-                  <el-form-item>
+                  <el-form-item prop="city">
                     <span>City/Municipalities</span>
                     <el-select @change="handleChangeCity" v-model="form.city" style="width: 100%">
                       <el-option
@@ -151,11 +151,9 @@
                     </el-select>
                   </el-form-item>
 
-                  <el-form-item>
-                    <span>City/Municipalities</span>
-                    <el-select 
-                      v-model="form.brgy" 
-                      style="width: 100%">
+                  <el-form-item prop="brgy">
+                    <span>Barangay</span>
+                    <el-select v-model="form.brgy" style="width: 100%">
                       <el-option
                         v-for="brgy in allBarangays"
                         :key="brgy"
@@ -164,6 +162,17 @@
                       >
                       </el-option>
                     </el-select>
+                  </el-form-item>
+                </div>
+
+                <div class="form-name">
+                  <el-form-item pro="zip_code">
+                    <span>Zip code</span>
+                    <el-input type="text" v-model="form.zip_code" />
+                  </el-form-item>
+                  <el-form-item prop="country">
+                    <span>Country</span>
+                    <el-input type="text" v-model="form.country" />
                   </el-form-item>
                 </div>
               </div>
@@ -209,14 +218,14 @@ import BreadCrumb from '@/components/BreadCrumb.vue'
 import useClient from '@/composables/Clients'
 import { ref, reactive, onMounted, watch, computed } from 'vue'
 import type { ClientInformation } from '@/services/client'
-import type { FormInstance, FormRules } from 'element-plus'
+import { ElMessage, FormInstance, FormRules } from 'element-plus'
 import { barangays } from '@/utils/barangays'
 import { provinces } from '@/utils/provinces'
 import { municipalities } from '@/utils/municipalities'
 import { regions } from '@/utils/regions'
 let loading = ref(false)
 const form = reactive({} as ClientInformation)
-const { getAllClients, status, createClient } = useClient()
+const { getAllClients, status, createClient, rules } = useClient()
 const users = ref([])
 const allCities = ref([] as Provinces[])
 const allBarangays = ref([] as Provinces[])
@@ -231,15 +240,8 @@ const showAddress = ref(false)
 const verifyInfo = ref(false)
 const disablePrev = ref(true)
 const formRuleRef = ref<FormInstance>()
-const regionCode = ref('' as string)
-const provinceCode = ref('' as string)
-const cityMunCode = ref('' as string)
+
 let formStatus = ref('')
-type City = {
-  name: string
-  mun_code: string
-  prov_code: string
-}
 
 type Provinces = {
   psgcId: string
@@ -259,6 +261,12 @@ const getData = async () => {
     console.log(error)
   }
 }
+
+watch(users, (newval, oldVal) => {
+  if(newval !== oldVal) {
+    users.value = newval
+  }
+})
 
 const next = () => {
   active.value += 1
@@ -280,22 +288,21 @@ const prev = () => {
   }
 }
 
-const search = reactive({
-  name: '',
-  regionId: '',
-  provinceId: '',
-  municipalityId: '',
-  barangaysId: ''
-})
-
 const createClients = () => {
-  if (!formRuleRef.value) return
-  else if (formStatus.value !== 'finish') return
-  formRuleRef.value.validate(async (isValid) => {
-    if (isValid) {
-      await createClient(form)
-    }
-  })
+  try {
+    if (!formRuleRef.value) return
+    else if (formStatus.value !== 'finish') return
+    formRuleRef.value.validate(async (isValid) => {
+      if (isValid) {
+        await createClient(form)
+        createVisible.value = false
+      } else {
+        createVisible.value = true
+      }
+    })
+  } catch (error) {
+    ElMessage.error('Kindly check your data')
+  }
 }
 
 const handleRegionChange = () => {
