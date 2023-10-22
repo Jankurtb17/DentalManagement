@@ -29,7 +29,7 @@
             <div class="list-edit content">
               <el-icon><Edit /></el-icon> Edit Patients
             </div>
-            <div class="list-delete content">
+            <div class="list-delete content" @click="deletePatient(scope.row._id)">
               <el-icon><Delete /></el-icon> Delete Patients
             </div>
           </div>
@@ -79,6 +79,10 @@ const router = useRouter()
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
 const multipleSelection = ref(props.data)
 
+const emit = defineEmits<{
+  (e: 'delete', id: string): void
+}>()
+
 const handleRowClick = (row: User) => {
   // Update selectedRows array based on row clicks
   if (isSelected(row)) {
@@ -105,6 +109,10 @@ const showPatientInfo = (id: string) => {
       patient_id: id
     }
   })
+}
+
+const deletePatient = (id: string) => {
+  emit('delete', id)
 }
 </script>
 
