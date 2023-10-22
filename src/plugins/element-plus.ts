@@ -11,6 +11,7 @@ import {
   ElSubMenu,
   ElButton,
   ElForm,
+
   ElFormItem,
   ElTable,
   ElTableColumn,
@@ -96,7 +97,9 @@ import {
   More,
   Top,
   Wallet,
-  Money
+  Money,
+  Warning,
+  WarningFilled
 } from "@element-plus/icons-vue";
 
 export default (app: App): void => {
@@ -163,11 +166,13 @@ export default (app: App): void => {
     .component("el-icon-zoomin", ZoomIn)
     .component("Edit", Edit)
     .component("Delete", Delete)
+    .component("Warning", Warning)
     .component("Add", CirclePlus)
     .component("View", View)
     .component("EditPen", EditPen)
     .component("User", User)
     .component("Close", Close)
+    .component("WarningFilled", WarningFilled)
     .component("UserFilled", UserFilled)
     .component("Download", Download)
     .component("Refresh", Refresh)
