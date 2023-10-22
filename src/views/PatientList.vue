@@ -32,12 +32,12 @@
       </BreadCrumb>
     </template>
     <template #body>
-      <AppTable :isLoading="status.isLoading" :data="users" />
+      <AppTable :isLoading="status.isLoading" :data="users" @delete="isDelPatient" />
       <AppModal v-model="deleteUser">
         <template #body> Delete User </template>
       </AppModal>
 
-      <AppModal v-model="createVisible">
+      <AppModal size="50%" v-model="createVisible">
         <template #body>
           <el-steps finish-status="success" space="200" :active="active" simple>
             <el-step title="Personal Information" :icon="Edit" />
@@ -195,6 +195,20 @@
           </div>
         </template>
       </AppModal>
+
+      <AppModal size="30%" title="Delete Patient" v-model="showDelPatient">
+        <template #body>
+          <div style="text-align: center">
+            <el-icon size="20" color="#e6a23c"><WarningFilled /></el-icon> Are you sure you want to delete this patient?
+          </div>
+        </template>
+        <template #footer>
+          <div>
+            <el-button @click="hideDelete">Cancel</el-button>
+            <el-button :icon="Delete" type="danger" @click="delPatient">Delete</el-button>
+          </div>
+        </template>
+      </AppModal>
     </template>
   </BaseLayout>
 </template>
@@ -212,7 +226,8 @@ import {
   Picture,
   UploadFilled,
   Right,
-  LocationFilled
+  LocationFilled,
+  Delete
 } from '@element-plus/icons-vue'
 import BreadCrumb from '@/components/BreadCrumb.vue'
 import useClient from '@/composables/Clients'
@@ -223,15 +238,13 @@ import { barangays } from '@/utils/barangays'
 import { provinces } from '@/utils/provinces'
 import { municipalities } from '@/utils/municipalities'
 import { regions } from '@/utils/regions'
-let loading = ref(false)
 const form = reactive({} as ClientInformation)
-const { getAllClients, status, createClient, rules } = useClient()
+const { getAllClients, status, createClient, deletePatient, rules } = useClient()
 const users = ref([])
 const allCities = ref([] as Provinces[])
 const allBarangays = ref([] as Provinces[])
 const allProvinces = ref([] as Provinces[])
 const allRegions = ref([] as Provinces[])
-// const region = ref([])
 const deleteUser = ref(false)
 const createVisible = ref(false)
 const active = ref(0)
@@ -240,8 +253,17 @@ const showAddress = ref(false)
 const verifyInfo = ref(false)
 const disablePrev = ref(true)
 const formRuleRef = ref<FormInstance>()
+const showDelPatient = ref(false)
+const formStatus = ref('')
+const userId = ref<string>('')
+const isDelPatient = (id: string) => {
+  showDelPatient.value = true
+  userId.value = id
+}
 
-let formStatus = ref('')
+const hideDelete = () => {
+  showDelPatient.value = false
+}
 
 type Provinces = {
   psgcId: string
@@ -263,7 +285,7 @@ const getData = async () => {
 }
 
 watch(users, (newval, oldVal) => {
-  if(newval !== oldVal) {
+  if (newval !== oldVal) {
     users.value = newval
   }
 })
@@ -296,13 +318,31 @@ const createClients = () => {
       if (isValid) {
         await createClient(form)
         createVisible.value = false
+        formRuleRef.value?.resetFields()
+        ElMessage({
+          type: 'success',
+          message: 'Successfully Added!'
+        })
+        // Get updated list of patients
+        getData()
       } else {
         createVisible.value = true
+        ElMessage.error('Kindly check your data')
       }
     })
   } catch (error) {
     ElMessage.error('Kindly check your data')
   }
+}
+
+const delPatient = async () => {
+  await deletePatient(userId.value)
+  showDelPatient.value = false
+  ElMessage({
+    type: 'success',
+    message: 'Successfully Deleted!'
+  })
+  getData()
 }
 
 const handleRegionChange = () => {

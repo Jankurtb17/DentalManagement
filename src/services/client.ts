@@ -41,7 +41,7 @@ class ClientService {
     return http.patch<ClientInformation>(`/clients/${clientId}`, client)
   }
 
-  deleteClientg = (clientId: string): Promise<any> => {
+  deleteClient = (clientId: string): Promise<any> => {
     return http.delete(`/clients/${clientId}`)
   }
 }
