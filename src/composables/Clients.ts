@@ -190,12 +190,25 @@ export const useClient = () => {
     return client
   }
 
+  const deletePatient = async(id: string) => {
+    status.isLoading = true
+    const client = await clientApi
+      .deleteClient(id)
+      .then((response) => response.data)
+      .catch((e) =>{
+        throw e
+      })
+      .finally(() => status.isLoading = false)
+    return client
+  }
+
   return {
     rules,
     status,
     getAllClients,
     getClient,
-    createClient
+    createClient,
+    deletePatient
   }
   
 }
