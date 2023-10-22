@@ -2,7 +2,7 @@
   <el-dialog
     v-bind="$attrs"
     :title="props.title"
-    width="50%"
+    :width="props.size"
     :destroy-on-close="true"
     >
     <slot name="body">
@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps(["title"])
+const props = defineProps(["title", "size"])
 
 </script>
 
