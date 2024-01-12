@@ -91,7 +91,7 @@
             <template #body>
               <label class="text-gray">Transactions</label>
               <el-scrollbar height="30vh"> 
-                <AppTable />
+                <!-- <AppTable /> -->
               </el-scrollbar>
             </template>
           </CardComponent>
@@ -107,7 +107,7 @@ import LineChart from "@/components/LineChart/LineChart.vue"
 import BaseLayout from '@/base/BaseLayout.vue'
 import CardComponent from "@/components/CardComponent.vue"
 import ChartComponent from '@/components/ChartComponent.vue'
-import AppTable from '@/components/AppTable.vue'
+// import AppTable from '@/components/AppTable.vue'
 import { data } from "@/composables/BarChart"
 import { ref, reactive, provide, onMounted } from 'vue'
 import { use } from 'echarts/core'

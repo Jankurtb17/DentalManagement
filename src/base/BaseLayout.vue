@@ -4,7 +4,6 @@
       <slot name="header"> </slot>
     </el-header>
     <el-header class="header-two" v-if="$route.meta.hasTwoHeader">
-      <slot name="header-two"> </slot>
       <slot name="extra"></slot>
     </el-header>
     <!-- <el-scrollbar height="95vh"> -->
@@ -25,8 +24,4 @@
   padding: 10px 20px;
 }
 
-.header-two {
-  display: flex;
-  justify-content: space-between;
-}
 </style>

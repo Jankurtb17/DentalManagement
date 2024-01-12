@@ -60,7 +60,8 @@ import {
   ElPopover,
   ElImage,
   ElSteps,
-  ElStep
+  ElStep,
+  ElText
 } from "element-plus";
 
 import {
@@ -163,6 +164,7 @@ export default (app: App): void => {
     .use(ElImage)
     .use(ElSteps)
     .use(ElStep)
+    .use(ElText)
     .component("el-icon-zoomin", ZoomIn)
     .component("Edit", Edit)
     .component("Delete", Delete)

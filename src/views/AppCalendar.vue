@@ -12,7 +12,7 @@
 
 <script lang="ts" setup>
 import BaseLayout from "@/base/BaseLayout.vue";
-import CalendarComponent from "@/components/CalendarComponent.vue"
+import CalendarComponent from "@/components/CalendarComponent/CalendarComponent.vue"
 </script>
 
 <style scoped>

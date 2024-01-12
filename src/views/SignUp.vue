@@ -28,7 +28,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button color="#445ec1" size="large" primary>Register</el-button>
+          <el-button color="#445ec1" size="large" primary @submit="registerUser">Register</el-button>
         </el-form-item>
       </el-form>
       <div class="login-link"><span>Already have an account?</span> <a href="#" @click="loginShow">Login here</a></div>
@@ -44,6 +44,9 @@
 <script lang="ts" setup>
 import SignIn from '@/views/SignIn.vue'
 import { ref, reactive } from 'vue'
+import useUser from "@/composables/Users"
+
+const { register } = useUser()
 const login = ref(false)
 const loginShow = () => {
   login.value = true
@@ -56,6 +59,10 @@ const form = reactive<Form>({
   email: '',
   password: ''
 })
+
+const registerUser = async () => {
+ await register(form)
+}
 </script>
 
 <style scoped>

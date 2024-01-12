@@ -84,12 +84,7 @@
                 <el-skeleton animated :loading="false">
                   <template #template>
                     <div class="patient-data-r1">
-                      <el-skeleton-item variant="text" />
-                      <el-skeleton-item variant="text" />
-                      <el-skeleton-item variant="text" />
-                      <el-skeleton-item variant="text" />
-                      <el-skeleton-item variant="text" />
-                      <el-skeleton-item variant="text" />
+                      <el-skeleton-item variant="text" v-for="(n, index) in 6" :key="index"/>
                     </div>
                   </template>
                   <template #default>
@@ -113,12 +108,7 @@
                 <el-skeleton animated :loading="false">
                   <template #template>
                     <div class="patient-data-r1">
-                      <el-skeleton-item variant="text" />
-                      <el-skeleton-item variant="text" />
-                      <el-skeleton-item variant="text" />
-                      <el-skeleton-item variant="text" />
-                      <el-skeleton-item variant="text" />
-                      <el-skeleton-item variant="text" />
+                      <el-skeleton-item variant="text" v-for="(n, index) in 6" :key="index"/>
                     </div>
                   </template>
                   <template #default>

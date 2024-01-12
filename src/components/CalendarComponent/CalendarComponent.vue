@@ -62,7 +62,7 @@
           </el-form-item>
         </div>
         <el-form-item label="Appointment Date">
-          <el-input v-model="form.appointment_date" :value="startDate" disabled/>
+          <el-input v-model="form.appointment_date" :value="startDate" disabled />
         </el-form-item>
         <el-divider />
         <el-form-item label="Procedure">
@@ -106,122 +106,47 @@
       </div>
     </template>
   </AppModal>
+
+  <el-drawer v-model="drawer" title="Appointment Detail" >
+    <AppointmentDetail />
+  </el-drawer>
 </template>
 
 <script lang="ts" setup>
+import AppointmentDetail from './AppointmentDetail.vue'
 import { uuid } from 'vue-uuid'
-import type { FormInstance, FormRules } from 'element-plus'
 import FullCalendar from '@fullcalendar/vue3'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction'
-import AppModal from './AppModal.vue'
+import AppModal from '@/components/AppModal.vue'
 import useClient from '@/composables/Clients'
 import useAppointment from '@/composables/Appointment'
 import type {
-  CalendarOptions,
-  EventApi,
-  EventInput,
   DateSelectArg,
-  EventClickArg
 } from '@fullcalendar/core'
 import { onMounted, reactive, ref, watch } from 'vue'
 import type { ClientInformation } from '@/services/client'
-import { Appointment } from '@/services/appointment'
+import { useCalendar } from '@/components/CalendarComponent/hooks/useCalendar'
+import { useCalendarForm, caseType, type ListOptionItem } from "@/components/CalendarComponent/hooks/useForm"
+const {
+  calendarOptions,
+  handleEventClick,
+  getDataEvents,
+  allEvents,
+  isOpen,
+  isSaved,
+  startDate,
+  endDate,
+  drawer
+} = useCalendar()
 const { createAppointment, getAppointments } = useAppointment()
 const { getAllClients } = useClient()
-const rules = reactive<FormRules>({
-  name: [
-    {
-      trigger: 'change',
-      required: true,
-      message: 'Please enter a label'
-    }
-  ]
-})
-
-interface ListOptionItem {
-  value: string
-  label: string
-}
-
-const caseType = [
-  'Wisdom Tooth removal',
-  'Dental extraction',
-  'Dental implant',
-  'Dentures',
-  'Dental sealant',
-  'Dental braces',
-  'Veneer',
-  'Root canal',
-  'Bridge',
-  'Crown',
-  'Teeth Whitening',
-  'Teeth Cleaning',
-  'Tooth Filling'
-]
-
+const { form, rules } = useCalendarForm()
 const payment = ['Card', 'Maya', 'Gcash', 'GoTyme', 'Cash']
 const procedures = ref<ListOptionItem[]>([])
 const paymentMethods = ref<ListOptionItem[]>([])
-interface FormType {
-  appointment_date: string
-  name: string
-  startTime: string
-  endTime: string
-  procedure: string
-  payment: string
-  price: number
-  cancelled?: boolean
-}
-const startDate = ref('')
-const endDate = ref('')
 const allDay = ref(false)
 const users = ref([] as ClientInformation[])
 const calendar = ref()
 const formRules = ref()
-const form = reactive<FormType>({
-  appointment_date: '',
-  name: '',
-  startTime: '',
-  endTime: '',
-  procedure: '',
-  payment: '',
-  price: 0
-})
-const isSaved = ref(false)
-let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
-const isOpen = ref(false)
-const currentEvents = ref([{ title: 'Meeting', start: new Date() }] as EventApi[])
-const INITIAL_EVENT = ref([
-  {
-    id: uuid.v4,
-    title: 'All-day event',
-    start: todayStr,
-    display: 'block'
-  },
-  {
-    id: uuid.v4,
-    title: 'Timed event',
-    start: todayStr + 'T12:00:00'
-  }
-])
-
-let allEvents = ref([] as any)
-
-const getDataEvents = async () => {
-  allEvents.value = await getAppointments()
-  allEvents.value = allEvents.value.map((item: any) => {
-    return {
-      id: item._id,
-      title: item.procedure,
-      start: item.appointment_date,
-      display: 'block'
-    }
-  }) as EventApi[]
-}
-
-
 
 const getUsers = async () => {
   users.value = await getAllClients()
@@ -253,44 +178,6 @@ const findProcedure = (query: string) => {
       })
     }, 200)
   }
-}
-
-const calendarOptions = reactive({
-  plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-  initialView: 'dayGridMonth',
-  themeSystem: 'bootstrap5Plugin',
-  headerToolbar: {
-    left: 'prev,next today',
-    center: 'title',
-    right: 'dayGridMonth,timeGridWeek,timeGridDay'
-  },
-  editable: true,
-  selectable: true,
-  selectMirror: true,
-  // eventDisplay: 'block',
-  eventColor: '#445ec1',
-  dayMaxEvents: true,
-  weekends: true,
-  initialEvents: allEvents.value,
-  select: handleDateSelect,
-  eventClick: handleEventClick,
-  events: allEvents.value,
-  nowIndicator: true
-} as CalendarOptions)
-
-function handleEventClick(clickInfo: EventClickArg) {
-  if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-    clickInfo.event.remove()
-  }
-}
-
-function handleDateSelect(selectInfo: DateSelectArg) {
-  isOpen.value = !isOpen.value
-  let calendarApi = selectInfo.view.calendar
-  startDate.value = selectInfo.startStr
-  endDate.value = selectInfo.endStr
-  allDay.value = selectInfo?.allDay
-  calendarApi.unselect()
 }
 
 const saveAppointment = (info: DateSelectArg) => {
@@ -329,7 +216,11 @@ const saveAppointment = (info: DateSelectArg) => {
 
 onMounted(() => {
   getUsers()
-  getDataEvents()
+  getDataEvents().then(() => {
+    // After fetching data, update the FullCalendar options
+    calendarOptions.initialEvents = allEvents.value as any
+    calendarOptions.events = allEvents.value as any
+  })
   procedures.value = caseType.map((item) => {
     return { value: `${item}`, label: `${item}` }
   })
@@ -352,7 +243,7 @@ onMounted(() => {
 
 .btn-submit {
   display: flex;
-  justify-content: flex-end;;
+  justify-content: flex-end;
 }
 .current-time-indicator {
   position: absolute;
