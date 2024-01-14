@@ -1,5 +1,5 @@
 <template>
-  <el-row>
+  <el-row class="header">
     <div>
       <el-avatar :size="100" :src="url" />
     </div>
@@ -23,20 +23,28 @@
     </div>
   </el-row>
   <el-row>
-    <h2>CASE NAME</h2>
+    <el-col :span="24">
+      <div>
+        <h2>{{ caseTitle }}</h2>
+      </div>
+    </el-col>
   </el-row>
+  <AppointmentTimeline />
 </template>
 
 <script lang="ts" setup>
+import AppointmentTimeline from "@/components/CalendarComponent/AppointmentTimeline.vue"
 const url = 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg'
 defineProps({
-  email: String
+  email: String,
+  caseTitle: String
 })
+
 </script>
 
 <style scoped>
 
-.el-row {
+.el-row.header {
   display: grid;
   grid-template-columns: 150px 1fr 1fr;
 }
@@ -51,5 +59,10 @@ defineProps({
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+ul.el-timeline {
+  padding: 0;
+  margin-top: 10px;
 }
 </style>

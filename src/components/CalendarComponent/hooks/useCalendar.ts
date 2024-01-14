@@ -17,6 +17,9 @@ export function useCalendar() {
   const drawer = ref(false)
   const startDate = ref('')
   const endDate = ref('')
+  const caseDetail = reactive({
+    title: ''
+  })
   const allEvents = ref([] as EventApi[])
   const { createAppointment, getAppointments } = useAppointment()
   const calendarOptions = reactive({
@@ -53,6 +56,8 @@ export function useCalendar() {
 
   function handleEventClick(clickInfo: EventClickArg) {
     drawer.value = true
+    console.log(clickInfo)
+    caseDetail.title = clickInfo.event.title
     // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
     //   clickInfo.event.remove()
     // }
@@ -105,6 +110,7 @@ export function useCalendar() {
     isSaved,
     startDate,
     endDate,
-    drawer
+    drawer,
+    caseDetail
   }
 }

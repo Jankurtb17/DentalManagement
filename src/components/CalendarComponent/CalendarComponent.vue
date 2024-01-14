@@ -108,7 +108,7 @@
   </AppModal>
 
   <el-drawer v-model="drawer" title="Appointment Detail" >
-    <AppointmentDetail />
+    <AppointmentDetail :caseTitle="caseDetail.title"/>
   </el-drawer>
 </template>
 
@@ -135,9 +135,10 @@ const {
   isSaved,
   startDate,
   endDate,
-  drawer
+  drawer,
+  caseDetail
 } = useCalendar()
-const { createAppointment, getAppointments } = useAppointment()
+const { createAppointment } = useAppointment()
 const { getAllClients } = useClient()
 const { form, rules } = useCalendarForm()
 const payment = ['Card', 'Maya', 'Gcash', 'GoTyme', 'Cash']
