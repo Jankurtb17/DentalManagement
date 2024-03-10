@@ -41,7 +41,7 @@
   <el-row>
     <el-col :span="24">
       <div>
-        <h2>{{ appointment.procedure }}</h2>
+        <h2>{{ props.appointment?.procedure }}</h2>
       </div>
     </el-col>
   </el-row>
