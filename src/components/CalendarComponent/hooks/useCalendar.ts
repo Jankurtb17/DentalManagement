@@ -2,6 +2,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { reactive, ref, onMounted } from "vue"
+import type { Appointment } from '@/services/appointment'
 import useAppointment from '@/composables/Appointment'
 import type {
   CalendarOptions,
@@ -17,24 +18,24 @@ export function useCalendar() {
   const drawer = ref(false)
   const startDate = ref('')
   const endDate = ref('')
-  const caseDetail = reactive({
-    title: ''
-  })
+  const caseId = ref('')
   const allEvents = ref([] as EventApi[])
-  const { createAppointment, getAppointments } = useAppointment()
+  const appointment = reactive({} as Appointment)
+  const { getAppointments, getAppointment } = useAppointment()
+  const isLoading = ref(false)
   const calendarOptions = reactive({
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth',
     themeSystem: 'bootstrap5Plugin',
     headerToolbar: {
-      left: 'prev,next today',
+    left: 'prev,next,today',
       center: 'title',
       right: 'dayGridMonth,timeGridWeek,timeGridDay'
     },
     editable: true,
     selectable: true,
     selectMirror: true,
-    // eventDisplay: 'block',
+    eventDisplay: 'block',
     eventColor: '#445ec1',
     dayMaxEvents: true,
     weekends: true,
@@ -54,13 +55,12 @@ export function useCalendar() {
     calendarApi.unselect()
   }
 
-  function handleEventClick(clickInfo: EventClickArg) {
+   async function handleEventClick(clickInfo: EventClickArg) {
     drawer.value = true
-    console.log(clickInfo)
-    caseDetail.title = clickInfo.event.title
-    // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-    //   clickInfo.event.remove()
-    // }
+    isLoading.value = true
+    const data = await getAppointment(clickInfo.event.id)
+    Object.assign(appointment, data)
+    isLoading.value = false
   }
 
   const getDataEvents = async () => {
@@ -111,6 +111,8 @@ export function useCalendar() {
     startDate,
     endDate,
     drawer,
-    caseDetail
+    caseId,
+    appointment,
+    isLoading
   }
 }

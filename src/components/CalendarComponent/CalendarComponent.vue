@@ -108,7 +108,7 @@
   </AppModal>
 
   <el-drawer v-model="drawer" title="Appointment Detail" >
-    <AppointmentDetail :caseTitle="caseDetail.title"/>
+    <AppointmentDetail :appointment="appointment" :loading="isLoading" @close="closeDrawer"/>
   </el-drawer>
 </template>
 
@@ -122,7 +122,7 @@ import useAppointment from '@/composables/Appointment'
 import type {
   DateSelectArg,
 } from '@fullcalendar/core'
-import { onMounted, reactive, ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 import type { ClientInformation } from '@/services/client'
 import { useCalendar } from '@/components/CalendarComponent/hooks/useCalendar'
 import { useCalendarForm, caseType, type ListOptionItem } from "@/components/CalendarComponent/hooks/useForm"
@@ -136,7 +136,9 @@ const {
   startDate,
   endDate,
   drawer,
-  caseDetail
+  caseId,
+  appointment,
+  isLoading
 } = useCalendar()
 const { createAppointment } = useAppointment()
 const { getAllClients } = useClient()
@@ -151,6 +153,10 @@ const formRules = ref()
 
 const getUsers = async () => {
   users.value = await getAllClients()
+}
+
+const closeDrawer = () => {
+  drawer.value = false
 }
 
 const loading = ref(false)
@@ -174,7 +180,7 @@ const findProcedure = (query: string) => {
     loading.value = true
     setTimeout(() => {
       loading.value = false
-      procedures.value = procedures.value.filter((item) => {
+      procedures.value = procedures.value.filter((item: any) => {
         return item.includes(query.toLowerCase())
       })
     }, 200)
@@ -205,7 +211,8 @@ const saveAppointment = (info: DateSelectArg) => {
           procedure: form.procedure,
           payment_method: form.payment,
           price: form.price,
-          cancelled: false
+          // cancelled: false
+          status: "booked"
         }
         await createAppointment(evntAppointment)
         form.name = ''
